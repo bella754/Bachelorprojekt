@@ -1,0 +1,46 @@
+{   
+    "items": [
+        {
+            "activity": "Abschlussarbeit",
+            "createdAt": "19/11/2024 10:09",
+            "properties": {
+                "degree": "Bachelor",
+                "title": "Test Title",
+                "author": "Max Mustermann",
+                "first_supervisor": "Test1",
+                "second_supervisor": "Test2",
+                "language": "Deutsch"
+            }
+        },
+        {
+            "activity": "Kurs",
+            "createdAt": "19/11/2024 10:09",
+            "properties": {
+                "name": "Test Course",
+                "lecturer": "Max Mustermann",
+                "semester": "Wintersemester"
+            }
+        },
+        {
+            "activity": "Abschlussarbeit",
+            "createdAt": "19/11/2024 10:09",
+            "properties": {
+                "degree": "Master",
+                "title": "Test Title 2",
+                "author": "Maxine Musterfrau",
+                "first_supervisor": "Test1",
+                "second_supervisor": "Test2",
+                "language": "Deutsch"
+            }
+        },
+        {
+            "activity": "Kurs",
+            "createdAt": "19/11/2024 10:09",
+            "properties": {
+                "name": "Test Course",
+                "lecturer": "Max Mustermann",
+                "semester": "Wintersemester"
+            }
+        }
+    ]
+}

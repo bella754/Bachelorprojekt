@@ -1,0 +1,24 @@
+{
+    "type": "object",
+    "properties": {
+      "activity": {
+        "type": "string"
+      },
+      "donor-name": { 
+        "type": "string",
+        "name": "Spender*in",
+        "inputType": "text"
+      },
+      "amount": { 
+        "type": "string",
+        "name": "Spendensumme",
+        "inputType": "number"
+      },
+      "reason": { 
+        "type": "string",
+        "name": "Betreff",
+        "inputType": "textarea"
+      }
+    },
+    "required": ["donor-name", "amount", "reason"]
+  }

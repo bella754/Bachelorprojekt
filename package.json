@@ -12,8 +12,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
     "express": "^4.21.1",
-    "mongoose": "^8.8.1",
+    "mongoose": "^8.8.2",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   },

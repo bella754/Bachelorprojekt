@@ -1,43 +1,34 @@
 <script setup>
-import { ref } from 'vue';
-import Sidenavigation from "../Sidenavigation.vue";
+    import { ref } from 'vue';
+    import Sidenavigation from "@/components/Sidenavigation.vue";
+    import thesisSchema from '@schemas/thesis.json';
+    // import { submit_form } from '../../helper';
 
-// Define reactive properties for each form input
-const degree = ref("Bachelor");
-const title = ref("");
-const author = ref("");
-const supervisor = ref("");
-const supervisor2 = ref("");
-const language = ref("Deutsch");
+    const formData = ref({});
+    const schema = thesisSchema.properties;
 
-async function submit_form() {
-    // Gather input values into an object
-    const inputs = {
-        degree: degree.value,
-        title: title.value,
-        author: author.value,
-        supervisor: supervisor.value,
-        supervisor2: supervisor2.value,
-        language: language.value,
-    };
-    
-    // console.log("inputs: ", inputs); 
+    // Initialize formData based on schema
+    Object.keys(schema).forEach(key => {
+        formData.value[key] = '';         
+    });
 
-    try {
-        const response = await fetch('/api/thesis', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(inputs)
-        });
-        
-        const data = await response.json();
-        console.log("data in frontend: ", data);
-    } catch (error) {
-        console.error("Error loading tags: ", error);
+    // handle form submission
+    async function submit_form() {
+        try {
+            const response = await fetch('/api/thesis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData.value)
+            });
+            
+            const data = await response.json();
+            console.log("Data received:", data);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
     }
-}
 </script>
 
 <template>
@@ -45,39 +36,23 @@ async function submit_form() {
     <div class="form_thesis">
         <h1 class="form_headline">Abschlussarbeit erstellen</h1>
         <form class="form">
-            <div>
-                <label class="form_label" for="degree">Abschluss</label>
-                <select class="form_input" name="degree" id="degree" v-model="degree">
-                    <option value="Bachelor" selected>Bachelor</option>
-                    <option value="Master">Master</option>
+            <div v-for="(field, key) in schema" :key="key">
+                <label class="form_label" :for="key">{{ field.name || null }}</label>
+                
+                <select v-if="field.inputType === 'select'" class="form_input" :id="key" v-model="formData[key]">
+                    <option v-for="option in field.enum" :key="option" :value="option">{{ option }}</option>
                 </select>
-            </div>
-            <div>
-                <label class="form_label" for="titel">Titel</label>
-                <!-- <input class="form_input" id="titel" type="textarea" value="Bitte Titel angeben"> -->
-                <textarea class="form_input form_input_textarea" name="titel" id="titel" v-model="title">Bitte Titel angeben</textarea>
-            </div>
-            <div>
-                <label class="form_label" for="author">Autor*in</label>
-                <input class="form_input" id="author" v-model="author" type="text" value="Bitte Author*in angeben">
-            </div>
-            <div>
-                <label class="form_label" for="supervisor">Betreuer*in</label>
-                <input class="form_input" id="supervisor" v-model="supervisor" type="text" value="Bitte Betreuer*in angeben">
-            </div>
-            <div>
-                <label class="form_label" for="supervisor2">Zweitbetreuer*in</label>
-                <input class="form_input" id="supervisor2" v-model="supervisor2" type="text" value="Bitte Betreuer*in angeben">
-            </div>
-            <div>
-                <label class="form_label" for="language">Sprache</label>
-                <select class="form_input" name="language" id="language" v-model="language">
-                    <option value="Deutsch" selected>Deutsch</option>
-                    <option value="Englisch">Englisch</option>
-                </select>
+                
+                <textarea v-else-if="field.inputType === 'textarea'" class="form_input form_input_textarea" :id="key" v-model="formData[key]" :placeholder="'Bitte ' + field.name + ' angeben'" />
+                
+                <input v-else-if="field.inputType === 'text'" class="form_input" :id="key" v-model="formData[key]" type="text" :placeholder="'Bitte ' + field.name + ' angeben'" />
+
+                <input v-else-if="field.inputType === 'number'" class="form_input" :id="key" v-model="formData[key]" type="number" />
+                
+                <input v-else-if="field.inputType === 'date'" class="form_input" :id="key" v-model="formData[key]" type="date" />
             </div>
         </form>
-        <button class="form_thesis_submit" @click="submit_form()">Erstellen</button>
+        <button class="form_submit" @click="submit_form()">Erstellen</button>
     </div>
 </template>
 
@@ -85,7 +60,8 @@ async function submit_form() {
     .form_thesis {
         position: relative;
         left: 20%;
-        width: 80%;
+        width: 70%;
+        margin: 5% 5%;
     }
 
     .form {
@@ -109,7 +85,7 @@ async function submit_form() {
         font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
     }
 
-    .form_thesis_submit {
+    .form_submit {
         border: 1px solid #c02020;
         border-radius: 6px;
         padding: 5px 10px;
@@ -117,10 +93,10 @@ async function submit_form() {
         color: white;
         margin-top: 10px;
     }
-</style>
 
-<!-- Titel
-Name 
-Superviser
-Sprache
-BA/MA -->
+    .form_input::-webkit-outer-spin-button,
+    .form_input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>

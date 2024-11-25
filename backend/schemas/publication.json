@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "properties": {
+      "activity": {
+        "type": "string"
+      },
+      "title": { 
+        "type": "string",
+        "name": "Titel",
+        "inputType": "textarea"
+      },
+      "author": { 
+        "type": "string",
+        "name": "Author",
+        "inputType": "text"
+      },
+      "department": { 
+        "type": "string",
+        "name": "Fachbereich",
+        "inputType": "text"
+      },
+      "date": { 
+        "type": "string",
+        "name": "Datum der Veröffentlichung",
+        "inputType": "date"
+      }
+    },
+    "required": ["title", "author", "department", "date"]
+}

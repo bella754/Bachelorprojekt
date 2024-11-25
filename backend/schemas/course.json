@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "properties": {
+      "activity": {
+        "type": "string"
+      },
+      "name": { 
+        "type": "string",
+        "name": "Name",
+        "inputType": "text"
+      },
+      "number-of-students": { 
+        "type": "number",
+        "name": "Studi-Anzahl",
+        "inputType": "number" 
+      },
+      "lecturer": { 
+        "type": "string",
+        "name": "Dozent*in",
+        "inputType": "text"
+      },
+      "semester": { 
+        "type": "string",
+        "name": "Semester",
+        "inputType": "text"
+      }
+    },
+    "required": ["name", "number-of-students", "lecturer", "semester"]
+  }

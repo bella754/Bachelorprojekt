@@ -1,10 +1,11 @@
 <script setup>
-
+    import Sidenavigation from './Sidenavigation.vue';
 </script>
 
 <template>
+    <Sidenavigation></Sidenavigation>
     <div class="all-entries">
-        <h3>all entries view</h3>
+        
     </div>
     
 
@@ -14,6 +15,7 @@
     .all-entries {
         position: relative;
         left: 20%;
-        width: 80%;
+        width: 70%;
+        margin: 5% 5%;
     }
 </style>

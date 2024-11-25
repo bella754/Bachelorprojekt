@@ -1,10 +1,10 @@
 <script setup>
     import { ref } from 'vue';
     import Sidenavigation from "@/components/Sidenavigation.vue";
-    import courseSchema from '@schemas/course.json';
+    import publicationSchema from '@schemas/publication.json';
 
     const formData = ref({});
-    const schema = courseSchema.properties;
+    const schema = publicationSchema.properties;
 
     // Initialize formData based on schema
     Object.keys(schema).forEach(key => {
@@ -14,7 +14,7 @@
     // Function to handle form submission
     async function submit_form() {
         try {
-            const response = await fetch('/api/course', {
+            const response = await fetch('/api/publication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,8 +32,8 @@
 
 <template>
     <Sidenavigation></Sidenavigation>
-    <div class="form_course">
-        <h1 class="form_headline">Kursdaten einpflegen</h1>
+    <div class="form_thesis">
+        <h1 class="form_headline">Publikation erstellen</h1>
         <form class="form">
             <div v-for="(field, key) in schema" :key="key">
                 <label class="form_label" :for="key">{{ field.name || null }}</label>
@@ -46,8 +46,8 @@
                 
                 <input v-else-if="field.inputType === 'text'" class="form_input" :id="key" v-model="formData[key]" type="text" :placeholder="'Bitte ' + field.name + ' angeben'" />
 
-                <input v-else-if="field.inputType === 'number'" class="form_input" :id="key" v-model="formData[key]" type="number" :placeholder="'Bitte ' + field.name + ' angeben'" />
-            
+                <input v-else-if="field.inputType === 'number'" class="form_input" :id="key" v-model="formData[key]" type="number" />
+
                 <input v-else-if="field.inputType === 'date'" class="form_input" :id="key" v-model="formData[key]" type="date" />
             </div>
         </form>
@@ -56,7 +56,7 @@
 </template>
 
 <style scoped>
-    .form_course {
+    .form_thesis {
         position: relative;
         left: 20%;
         width: 70%;
@@ -84,12 +84,6 @@
         font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
     }
 
-    .form_input::-webkit-outer-spin-button,
-    .form_input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
     .form_submit {
         border: 1px solid #c02020;
         border-radius: 6px;
@@ -97,5 +91,11 @@
         background-color: #c02020;
         color: white;
         margin-top: 10px;
+    }
+
+    .form_input::-webkit-outer-spin-button,
+    .form_input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 </style>

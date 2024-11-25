@@ -6,10 +6,14 @@
   <div class="sidenavigation">
     <div class="sidenavigation_header">
       <img class="sidenavogation_logo" src="../assets/tu-berlin-logo.svg" alt="Logo TU Berlin">
-      <RouterLink class="sidenavigation_link" to="/">Home</RouterLink>
-      <RouterLink class="sidenavigation_link" to="/my_entries">Meine Einträge</RouterLink>
-      <RouterLink class="sidenavigation_link" to="/new_entry">Neuen Eintrag</RouterLink>
-      <RouterLink class="sidenavigation_link" to="/all_entries">Alle Einträge</RouterLink>
+      <div class="sidenavigation_links">
+        <RouterLink class="sidenavigation_link" to="/">Home</RouterLink>
+        <RouterLink class="sidenavigation_link" to="/my_entries">Meine Einträge</RouterLink>
+        <RouterLink class="sidenavigation_link" to="/new_entry">Neuen Eintrag</RouterLink>
+        <RouterLink class="sidenavigation_link" to="/all_entries">Alle Einträge</RouterLink>
+        <RouterLink class="sidenavigation_link" to="/users">Mitarbeitende verwalten</RouterLink>
+      </div>
+      
     </div>
         <div class="sidenavigation_footer">
       <RouterLink class="sidenavigation_link sidenavigation_link_support" to="/support">Support</RouterLink>
@@ -23,7 +27,7 @@
 <style scoped>
   .sidenavigation {
     background-color: #8A8282;
-    position: absolute;
+    position: fixed;
     height:100%;
     width: 20%;
     left: 0;
@@ -46,6 +50,29 @@
     color: black;
     font-size: small;
     display: block;
+    font-size: x-large;
+    margin: 0 20%;
+  }
+
+  .sidenavigation_link:hover {
+    text-decoration: underline;
+  }
+
+  .sidenavigation_userinfo {
+    margin-left: 20%;
+    font-size: x-large;
+  }
+
+  .sidenavigation_header {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media screen and (max-width: 628px) {
+    .sidenavigation_link {
+      font-size: large;
+    }
   }
 
 </style>

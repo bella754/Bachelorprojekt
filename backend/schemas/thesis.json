@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "activity": {
+      "type": "string"
+    },
+    "degree": {
+      "type": "string",
+      "name": "Abschluss",
+      "inputType": "select",
+      "enum": ["Bachelor", "Master"]  
+    },
+    "title": {
+      "type": "string",
+      "name": "Titel",
+      "inputType": "textarea"
+    },
+    "author": {
+      "type": "string",
+      "name": "Author",
+      "inputType": "text"
+    },
+    "first_supervisor": {
+      "type": "string",
+      "name": "Erstbetreuer*in",
+      "inputType": "text"
+    },
+    "second_supervisor": {
+      "type": "string",
+      "name": "Zweitbetreuer*in",
+      "inputType": "text"
+    },
+    "language": {
+      "type": "string",
+      "name": "Sprache",
+      "inputType": "select",
+      "enum": ["Deutsch", "Englisch"]
+    }
+  },
+  "required": ["degree", "title", "author", "first_supervisor", "second_supervisor", "language"]
+}

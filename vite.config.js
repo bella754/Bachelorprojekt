@@ -10,18 +10,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./frontend/src', import.meta.url))
+      '@': fileURLToPath(new URL('./frontend/src', import.meta.url)),
+      '@schemas': fileURLToPath(new URL('./backend/schemas', import.meta.url))
     }
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000', // Backend server URL
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  }
   // build: {
   //   outDir: 'frontend/dist'
   // }

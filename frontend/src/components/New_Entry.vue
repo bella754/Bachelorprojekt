@@ -16,10 +16,6 @@
             });
         });
     }
-
-    // console.log("modules: ", modules);
-    // console.log("forms: ", forms);
-
 </script>
 
 <template>
@@ -31,15 +27,14 @@
             <RouterLink v-for="form in forms" class="new-entry_formlink" :key="form.name" :to="`/new_entry/${form.name}`">{{form.name}}</RouterLink>  
         </div>
     </div>
-    
-
 </template>
 
 <style scoped>
     .new-entry {
         position: relative;
         left: 20%;
-        width: 80%;
+        width: 70%;
+        margin: 5% 5%;
     }
 
     .new-entry_formselection {
@@ -54,5 +49,9 @@
         padding: 5px 10px;
         text-decoration: none;
         color: black;
+    }
+
+    .new-entry_headline {
+        color: #c02020;
     }
 </style>
