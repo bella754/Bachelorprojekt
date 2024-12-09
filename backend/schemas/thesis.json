@@ -1,9 +1,6 @@
 {
   "type": "object",
   "properties": {
-    "activity": {
-      "type": "string"
-    },
     "degree": {
       "type": "string",
       "name": "Abschluss",

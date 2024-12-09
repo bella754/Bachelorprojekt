@@ -2,7 +2,6 @@
     import { ref } from 'vue';
     import Sidenavigation from "@/components/Sidenavigation.vue";
     import thesisSchema from '@schemas/thesis.json';
-    // import { submit_form } from '../../helper';
 
     const formData = ref({});
     const schema = thesisSchema.properties;
@@ -14,8 +13,10 @@
 
     // handle form submission
     async function submit_form() {
+        console.log("formData in frontend: ", formData.value);
+        
         try {
-            const response = await fetch('/api/thesis', {
+            const response = await fetch('/api/new-activity/thesis', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -24,7 +25,7 @@
             });
             
             const data = await response.json();
-            console.log("Data received:", data);
+            console.log("Data received from backend:", data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
@@ -33,7 +34,7 @@
 
 <template>
     <Sidenavigation></Sidenavigation>
-    <div class="form_thesis">
+    <div class="form_container">
         <h1 class="form_headline">Abschlussarbeit erstellen</h1>
         <form class="form">
             <div v-for="(field, key) in schema" :key="key">
@@ -57,7 +58,7 @@
 </template>
 
 <style scoped>
-    .form_thesis {
+    .form_container {
         position: relative;
         left: 20%;
         width: 70%;

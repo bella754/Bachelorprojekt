@@ -1,15 +1,12 @@
 {
     "type": "object",
     "properties": {
-      "activity": {
-        "type": "string"
-      },
       "name": { 
         "type": "string",
         "name": "Name",
         "inputType": "text"
       },
-      "number-of-students": { 
+      "number_of_students": { 
         "type": "number",
         "name": "Studi-Anzahl",
         "inputType": "number" 
@@ -22,8 +19,9 @@
       "semester": { 
         "type": "string",
         "name": "Semester",
-        "inputType": "text"
+        "inputType": "select",
+        "enum": ["Wintersemester", "Sommersemester", "Beide"]  
       }
     },
-    "required": ["name", "number-of-students", "lecturer", "semester"]
+    "required": ["name", "number_of_students", "lecturer", "semester"]
   }

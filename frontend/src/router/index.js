@@ -52,6 +52,12 @@ const router = createRouter({
       path: '/new_entry/Spende',
       name: 'new_entry-spende',
       component: () => import("../components/forms/Spende.vue")
+    },
+    {
+      path: '/entry/:activityId',
+      name: 'Entry',
+      props: true,
+      component: () => import("../components/Entry.vue")
     }
   ]
 })

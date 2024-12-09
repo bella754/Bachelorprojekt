@@ -13,8 +13,10 @@
 
     // Function to handle form submission
     async function submit_form() {
+        console.log("formData in frontend: ", formData.value);
+
         try {
-            const response = await fetch('/api/funding', {
+            const response = await fetch('/api/new-activity/funding', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -23,7 +25,7 @@
             });
             
             const data = await response.json();
-            console.log("Data received:", data);
+            console.log("Data received from backend:", data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
@@ -32,7 +34,7 @@
 
 <template>
     <Sidenavigation></Sidenavigation>
-    <div class="form_thesis">
+    <div class="form_container">
         <h1 class="form_headline">Spendeninfo erstellen</h1>
         <form class="form">
             <div v-for="(field, key) in schema" :key="key">
@@ -56,7 +58,7 @@
 </template>
 
 <style scoped>
-    .form_thesis {
+    .form_container {
         position: relative;
         left: 20%;
         width: 70%;

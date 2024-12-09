@@ -1,16 +1,13 @@
 {
     "type": "object",
     "properties": {
-      "activity": {
-        "type": "string"
-      },
-      "donor-name": { 
+      "donor_name": { 
         "type": "string",
         "name": "Spender*in",
         "inputType": "text"
       },
       "amount": { 
-        "type": "string",
+        "type": "number",
         "name": "Spendensumme",
         "inputType": "number"
       },
@@ -20,5 +17,5 @@
         "inputType": "textarea"
       }
     },
-    "required": ["donor-name", "amount", "reason"]
+    "required": ["donor_name", "amount", "reason"]
   }

@@ -1,19 +1,23 @@
 <script setup>
-
+    import Sidenavigation from "./Sidenavigation.vue";
 </script>
 
 <template>
+    <Sidenavigation class="sidenavigation"></Sidenavigation>
     <div class="support">
-        <h3>support view</h3>
-    </div>
-    
 
+    </div>
 </template>
 
 <style scoped>
     .support {
         position: relative;
         left: 20%;
-        width: 80%;
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 5% 5%;
     }
+    
 </style>

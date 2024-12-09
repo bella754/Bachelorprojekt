@@ -69,9 +69,15 @@
     gap: 40px;
   }
 
-  @media screen and (max-width: 628px) {
+  @media screen and (max-width: 900px) {
     .sidenavigation_link {
       font-size: large;
+    }
+  }
+
+  @media screen and (max-width: 674px) {
+    .sidenavigation_link {
+      font-size: medium;
     }
   }
 

@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-      "activity": {
-        "type": "string"
-      },
       "title": { 
         "type": "string",
         "name": "Titel",

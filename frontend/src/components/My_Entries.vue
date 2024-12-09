@@ -1,39 +1,60 @@
 <script setup>
     import Sidenavigation from './Sidenavigation.vue';
-    import data from '../../../backend/testData/listing.json';
+    import { ref, onMounted } from 'vue';
 
-    console.log("data: ", data);
+    const entries = ref([]);
 
     async function send_data() {
-        console.log("in send data function with data: ", data);
+        console.log("in send data function with entries: ", entries.value);
         try {
             const response = await fetch('/api/send-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(entries.value)
             });
             
-            const bakcned_data = await response.json();
-            console.log("Data received:", bakcned_data);
+            const backend_data = await response.json();
+            console.log("Data received:", backend_data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
     }
-    
+
+    onMounted(async () => {
+        try {
+            const response = await fetch('/api/all-activities', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            entries.value = await response.json();
+            // console.log("Data received:", entries.value);
+        } catch (error) {
+            console.error("Error getting data:", error);
+        }    
+    })
 </script>
 
 <template>
     <Sidenavigation></Sidenavigation>
     <div class="my-entries">
-        <h1 class="my-entries_headline">Deine letzten Einträge</h1>
-        <div class="listing-item" v-for="item in data.items">
+        <div class="my-entries_header">
+            <h1 class="my-entries_headline">Deine letzten Einträge</h1>
+            <button class="button button_filter">
+                Filter
+                <img class="my-entries_filter_image" src="../assets/filter.svg" alt="Filter SVG">
+            </button>
+        </div>
+        <div class="listing-item" v-for="item in entries" :key="item._id">
             <h3 class="listing-item_headline">{{ item.activity }} - {{ item.createdAt }}</h3>
             <p class="listing-item_description" v-for="prop in item.properties">{{ prop }}</p>
         </div>
         <div>
-            <button class="send_data_button" @click="send_data()">Daten abschicken</button>
+            <button class="button" @click="send_data()">Daten abschicken</button>
         </div>
     </div>
 </template>
@@ -47,6 +68,11 @@
         flex-direction: column;
         gap: 10px;
         margin: 5% 5%;
+    }
+
+    .my-entries_header {
+        display: flex;
+        align-items: center;
     }
 
     .listing-item {
@@ -63,7 +89,7 @@
         margin: 5px 10px;
     }
 
-    .send_data_button {
+    .button {
         border: 1px solid #c02020;
         border-radius: 6px;
         padding: 7px 10px;
@@ -73,5 +99,17 @@
         position: absolute;
         right: 0;
         cursor: pointer;
+    }
+
+    .button_filter {
+        display: flex;
+        align-items: center;
+        padding: 7px 20px;
+        gap: 5px;
+        margin: 0;
+    }
+
+    .my-entries_filter_image {
+        max-width: 20px;
     }
 </style>
