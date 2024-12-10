@@ -1,4 +1,12 @@
-# bachelorproject
+Für das Projekt ist mindestens node v.20.x notwendig
+
+Zum starten des Projektes:
+
+1. npm install 
+2. in den backend Ordner wechseln (cd backend)
+3. 'node server.js' ausführen
+
+<!-- # bachelorproject
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -38,4 +46,4 @@ npm run test:unit
 
 ```sh
 npm run lint
-```
+``` -->
