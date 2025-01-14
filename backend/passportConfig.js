@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+/*import { readFileSync } from 'fs';
 import fs from 'fs'
 import { parseString } from 'xml2js';
 import passport from 'passport';
@@ -79,28 +79,40 @@ passport.use(samlStrategy);
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
-export default passport;
+export default passport;*/
 
-/*import fs from 'fs';
+import fs from 'fs';
 import passport from 'passport';
-import SamlStrategy from '@node-saml/passport-saml';
-
+import { Strategy } from '@node-saml/passport-saml';
+// import { Strategy as SamlStrategy } from '@node-saml/passport-saml';
 // Pfad zur Zertifikatdatei
-const idpCertificate = fs.readFileSync('./certs/shibboleth-test.tu-berlin.de.pem', 'utf-8');
+const idpCertificate = fs.readFileSync("./certs/shibboleth-test_tu-berlin_de_cert.pem", 'utf-8')
+  .split('\n')            // Zeilen in ein Array aufteilen
+  .filter(line => !line.startsWith('-----')) // BEGIN/END entfernen
+  .join('');              // Alle Zeilen ohne Umbrüche verbinden
+
+// console.log(idpCertificate);
+
+let samlOptions = {
+    callbackUrl: 'http://localhost:3000/login/callback',
+    issuer: 'https://shibboleth-test.tu-berlin.de/idp/shibboleth',
+    cert: idpCertificate,
+    entryPoint: 'https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/Redirect/SSO', // EntryPoint
+};
+// console.log("samlOptions: ", samlOptions);
+
 
 // SAML-Strategie konfigurieren
-const samlStrategy = new SamlStrategy(
-  {
-    entryPoint: 'https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/Redirect/SSO', // EntryPoint
-    issuer: 'https://shibboleth-test.tu-berlin.de/idp/shibboleth', // EntityID des TestIDP
-    cert: idpCertificate, // Zertifikat des TestIDP
-    callbackUrl: 'http://localhost:3000/login/callback', // Callback-URL (muss mit deinem SAML-Setup übereinstimmen)
-  },
+const samlStrategy = new Strategy(
+  samlOptions,
   (profile, done) => {
     console.log('SAML Profile:', profile);
     return done(null, profile);
   }
 );
+
+// console.log("samlStrategy: ", samlStrategy);
+
 
 // Passport-Strategie registrieren
 passport.use(samlStrategy);
@@ -110,4 +122,4 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
 // Exportiere Passport-Konfiguration
-export default passport;*/
+export default passport;
