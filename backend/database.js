@@ -161,10 +161,10 @@ export async function createActivity(activityTitle, inputData) {
         const database = client.db('Horus');
         const activitiesCollection = database.collection('activities');
 
-        if (activityTitle == "Abschlussarbeit") {
+        if (activityTitle == "Aemter ud Gremienaktivität") {
             const activity = await activitiesCollection.insertOne(
                 {
-                    activity: "Abschlussarbeit",
+                    activity: "Aemter ud Gremienaktivität",
                     createdAt: formatDateTime(new Date()),
                     userID: 2,      // später über eingeloggten User
                     finished: false,
@@ -174,10 +174,10 @@ export async function createActivity(activityTitle, inputData) {
     
             // console.log("Created activity: ", activity);
             return activity;
-        } else if(activityTitle == "Kurs") {
+        } else if(activityTitle == "Ausstellungen und Messen") {
             const activity = await activitiesCollection.insertOne(
                 {
-                    activity: "Kurs",
+                    activity: "Ausstellungen und Messen",
                     createdAt: formatDateTime(new Date()),
                     userID: 2,      // später über eingeloggten User
                     finished: false,
@@ -187,10 +187,10 @@ export async function createActivity(activityTitle, inputData) {
     
             // console.log("Created activity: ", activity);
             return activity;
-        } else if(activityTitle == "Publikation") {
+        } else if(activityTitle == "Begutachtungs und Beratungsfunktionen") {
             const activity = await activitiesCollection.insertOne(
                 {
-                    activity: "Publikation",
+                    activity: "Begutachtungs und Beratungsfunktionen",
                     createdAt: formatDateTime(new Date()),
                     userID: 2,      // später über eingeloggten User
                     finished: false,
@@ -200,10 +200,101 @@ export async function createActivity(activityTitle, inputData) {
     
             // console.log("Created activity: ", activity);
             return activity;
-        } else if(activityTitle == "Spende") {
+        } else if(activityTitle == "Einrichtung eines internationalen Studiengangs") {
             const activity = await activitiesCollection.insertOne(
                 {
-                    activity: "Spende",
+                    activity: "Einrichtung eines internationalen Studiengangs",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "Elektronische Veröffentlichungen") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "Elektronische Veröffentlichungen",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "Lehre - Prüfungsleistungen Bachelor") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "Lehre - Prüfungsleistungen Bachelor",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "Organisation/Ausrichtung von Tagungen/Konferenzen") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "Organisation/Ausrichtung von Tagungen/Konferenzen",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "Publikationen in Sammelbänden") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "Publikationen in Sammelbänden",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "Publikationen in wissenschaftlichen Fachzeitschriften") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "Publikationen in wissenschaftlichen Fachzeitschriften",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "TU-interne Promotionen (fakultätszentrale Erfassung)") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "TU-interne Promotionen (fakultätszentrale Erfassung)",
+                    createdAt: formatDateTime(new Date()),
+                    userID: 2,      // später über eingeloggten User
+                    finished: false,
+                    properties: inputData
+                }
+            );
+    
+            // console.log("Created activity: ", activity);
+            return activity;
+        } else if(activityTitle == "Vortrag auf Tagungen/Konferenzen") {
+            const activity = await activitiesCollection.insertOne(
+                {
+                    activity: "Vortrag auf Tagungen/Konferenzen",
                     createdAt: formatDateTime(new Date()),
                     userID: 2,      // später über eingeloggten User
                     finished: false,
@@ -256,7 +347,7 @@ export async function updateActivity(inputID, updateInputs) {
 }
 
 /**
- * Update activity. FUNKTIONIERT
+ * Delete activity. FUNKTIONIERT
  * @param {string} inputID - ID of the activity
  */
 export async function deleteActivity(inputID) {
@@ -286,9 +377,9 @@ export async function getUsersWithActivities() {
         const usersWithActivities = await usersCollection.aggregate([
             {
                 $lookup: {
-                    from: 'activities',          // Verbinde mit der activities-Sammlung
-                    localField: '_id',          // Nutzer-ID in der users-Sammlung
-                    foreignField: 'userID',     // Nutzer-ID in der activities-Sammlung
+                    from: 'activities',          // Verbinde mit der activities-collection
+                    localField: '_id',          // Nutzer-ID in der users-collection
+                    foreignField: 'userID',     // Nutzer-ID in der activities-collection
                     as: 'activities'            // Ergebnisfeld für die Aktivitäten
                 },
             },

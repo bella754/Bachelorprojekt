@@ -34,24 +34,59 @@ const router = createRouter({
       component: () => import("../components/Users.vue")
     },
     {
-      path: '/new_entry/Abschlussarbeit',
+      path: '/new_entry/lehre-pruefungsleistungen-bachelor-master',
       name: 'new_entry-abschlussarbeit',
-      component: () => import("../components/forms/Abschlussarbeit.vue")
+      component: () => import("../components/forms/lehre-pruefungsleistungen-bachelor-master.vue")
     },
     {
-      path: '/new_entry/Kurs',
-      name: 'new_entry-kurs',
-      component: () => import("../components/forms/Kurs.vue")
+      path: '/new_entry/aemter-und-gremienaktivitaet-an-der-tu-berlin',
+      name: 'new_entry-aemter-und-gremienaktivitaet',
+      component: () => import("../components/forms/aemter-und-gremienaktivitaet-an-der-tu-berlin.vue")
     },
     {
-      path: '/new_entry/Publikation',
-      name: 'new_entry-publikation',
-      component: () => import("../components/forms/Publikation.vue")
+      path: '/new_entry/publikationen-in-sammelbaenden',
+      name: 'new_entry-publikation-sammelband',
+      component: () => import("../components/forms/publikationen-in-sammelbaenden.vue")
     },
     {
-      path: '/new_entry/Spende',
-      name: 'new_entry-spende',
-      component: () => import("../components/forms/Spende.vue")
+      path: '/new_entry/publikationen-in-wissenschaftlichen-fachzeitschriften',
+      name: 'new_entry-publikation-fachzeitschrift',
+      component: () => import("../components/forms/publikationen-in-wissenschaftlichen-fachzeitschriften.vue")
+    },
+    {
+      path: '/new_entry/ausstellungen-und-messen',
+      name: 'new_entry-ausstellungen-und-messen',
+      component: () => import("../components/forms/ausstellungen-und-messen.vue")
+    },
+    {
+      path: '/new_entry/begutachtungs-und-beratungsfunktionen',
+      name: 'new_entry-begutachten-und-beratung',
+      component: () => import("../components/forms/begutachtungs-und-beratungsfunktionen.vue")
+    },
+    {
+      path: '/new_entry/einrichtung-eines-internationalen-studiengangs',
+      name: 'new_entry-einrichtung-internationaler-studiengang',
+      component: () => import("../components/forms/einrichtung-eines-internationalen-studiengangs.vue")
+    },
+    {
+      path: '/new_entry/elektronische-veroeffentlichungen',
+      name: 'new_entry-elektronische-veroeffentlichung',
+      component: () => import("../components/forms/elektronische-veroeffentlichungen.vue")
+    },
+    {
+      path: '/new_entry/tu-interne-promotionen-fakultaetszentrale-erfassung',
+      name: 'new_entry-interne-prootionen',
+      component: () => import("../components/forms/tu-interne-promotionen-fakultaetszentrale-erfassung.vue")
+    },
+    {
+      path: '/new_entry/organisation-ausrichtung-von-tagungen-konferenzen',
+      name: 'new_entry-organisation-konferenzen',
+      component: () => import("../components/forms/organisation-ausrichtung-von-tagungen-konferenzen.vue")
+    },
+    {
+      path: '/new_entry/vortrag-auf-tagungen-konferenzen',
+      name: 'new_entry-tagungen-konferenzen',
+      component: () => import("../components/forms/vortrag-auf-tagungen-konferenzen.vue")
     },
     {
       path: '/entry/:activityId',

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lehre - Prüfungsleistungen Bachelor",
+  "type": "object",
+  "properties": {
+    "Modulprüf.(mü)": {
+      "type": "integer",
+      "description": "The number of mandatory module examinations"
+    },
+    "Modulprüf.(s)": {
+      "type": "integer",
+      "description": "The number of elective module examinations"
+    },
+    "Modulprüf.(ps)": {
+      "type": "integer",
+      "description": "The number of practical module examinations"
+    },
+    "Leistungsnachw.": {
+      "type": "string",
+      "description": "Performance records for the examination"
+    },
+    "Abschlüsse": {
+      "type": "string",
+      "description": "Details of degrees or certifications"
+    },
+    "Matrikelnr.": {
+      "type": "string",
+      "description": "The matriculation number of the student"
+    }
+  },
+  "required": [
+    "Modulprüf.(mü)",
+    "Modulprüf.(s)",
+    "Modulprüf.(ps)",
+    "Matrikelnr."
+  ],
+  "additionalProperties": false
+}

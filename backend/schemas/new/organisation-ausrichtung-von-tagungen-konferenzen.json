@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Organisation/Ausrichtung von Tagungen/Konferenzen",
+  "type": "object",
+  "properties": {
+    "Datum": {
+      "type": "string",
+      "pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$",
+      "description": "The date of the event in the format DD.MM.YYYY"
+    },
+    "Art": {
+      "type": "string",
+      "description": "The type of the event"
+    },
+    "akad. Grad": {
+      "type": "string",
+      "description": "The academic degree of the individual involved"
+    },
+    "Vorname": {
+      "type": "string",
+      "description": "The first name of the individual involved"
+    },
+    "Nachname": {
+      "type": "string",
+      "description": "The last name of the individual involved"
+    },
+    "Veranstalter": {
+      "type": "string",
+      "description": "The organizer of the event"
+    },
+    "Funktion": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4, 5],
+      "description": "The role or function of the individual in the event. Options: 1, 2, 3, 4, or 5"
+    },
+    "Tagungsname": {
+      "type": "string",
+      "description": "The name of the conference or meeting"
+    },
+    "Ort": {
+      "type": "string",
+      "description": "The location of the event"
+    },
+    "Land": {
+      "type": "string",
+      "description": "The country where the event is held"
+    },
+    "National/Internat.": {
+      "type": "string",
+      "enum": ["Nat.", "Int."],
+      "description": "Indicates whether the event is Nat. (National) or Int. (International)"
+    },
+    "Tagung an TU": {
+      "type": "string",
+      "enum": ["Ja", "Nein"],
+      "description": "Indicates whether the event was held at the TU (Technische Universität). Options: Ja (Yes) or Nein (No)"
+    },
+    "Veröffentlichung": {
+      "type": "boolean",
+      "description": "Indicates whether the event was published"
+    },
+    "Anzahl Teilnehmer": {
+      "type": "integer",
+      "description": "The number of participants in the event"
+    },
+    "Freigabe": {
+      "type": "string",
+      "enum": ["Ja", "Nein"],
+      "description": "Indicates whether the event is approved or released. Options: Ja (Yes) or Nein (No)"
+    },
+    "Gewicht": {
+      "type": "string",
+      "enum": ["Ja", "Nein"],
+      "description": "Indicates whether weight is applicable. Options: Ja (Yes) or Nein (No)"
+    },
+    "Regel": {
+      "type": "number",
+      "description": "The rule or regulation associated with the event, represented as a numeric value"
+    }
+  },
+  "required": [
+    "Datum",
+    "Art",
+    "Vorname",
+    "Nachname",
+    "Tagungsname",
+    "Ort",
+    "Land",
+    "National/Internat."
+  ],
+  "additionalProperties": false
+}

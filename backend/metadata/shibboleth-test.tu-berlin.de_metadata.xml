@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitiesDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:remd="http://refeds.org/metadata" xmlns:saml1md="urn:mace:shibboleth:metadata:1.0">
+<EntityDescriptor entityID="https://shibboleth-test.tu-berlin.de/idp/shibboleth">
+    <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <Extensions>
+            <saml1md:Scope regexp="false">facultyvii.tu-berlin.de</saml1md:Scope>
+            <saml1md:Scope regexp="false">tu-berlin.de</saml1md:Scope>
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="de">Technische Universitaet Berlin Test-IDP V4</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="en">Technische Universitaet Berlin Test-IDP V4</mdui:DisplayName>
+                <mdui:Description xml:lang="de">Technische Universitaet Berlin Test-IDP V4</mdui:Description>
+                <mdui:Description xml:lang="en">Technische Universitaet Berlin Test-IDP V4</mdui:Description>
+                <mdui:Logo height="75" width="219">https://mdv.aai.dfn.de/media/logos/e160/tu-berlin-logo-long-red_S1CdFoK.png</mdui:Logo>
+            </mdui:UIInfo>
+        </Extensions>
+        <KeyDescriptor use="encryption">
+            <ds:KeyInfo>
+                <ds:KeyName>shibboleth-test.tu-berlin.de</ds:KeyName>
+                <ds:X509Data>
+                    <ds:X509SubjectName>CN=shibboleth-test.tu-berlin.de,O=Technische Universität Berlin,ST=Berlin,C=DE</ds:X509SubjectName>
+                    <ds:X509Certificate>MIIIbzCCBlegAwIBAgIQEvpFwE7eV2IQZ7lOdQsRmTANBgkqhkiG9w0BAQwFADBE
+MQswCQYDVQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEaMBgGA1UE
+AxMRR0VBTlQgT1YgUlNBIENBIDQwHhcNMjQwNzI5MDAwMDAwWhcNMjUwNzI5MjM1
+OTU5WjBuMQswCQYDVQQGEwJERTEPMA0GA1UECBMGQmVybGluMScwJQYDVQQKDB5U
+ZWNobmlzY2hlIFVuaXZlcnNpdMOkdCBCZXJsaW4xJTAjBgNVBAMTHHNoaWJib2xl
+dGgtdGVzdC50dS1iZXJsaW4uZGUwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQClsO37OqSANNkcDXEo3bz00+MaQpm65XDPxPlawcWM0Wxxuatw9odG07li
+ZAELXOT2vLGphn5QdtEapOciQl7Ik+wbEzeBZep8xSaSYlEYtV1xfSAeVd0pnhu8
+ZgOyF/EXecejJbOjGYuVBIzgWVEPhuBdfHFmYY0/cl48M+1EwViXsTQnvPuNzZTU
+AZG0toXYLfveNKqd70nMGDv5jaJw/pts7vtT4BALHwUppVL6vvsOUqzfOucVFVl/
+BEo7UvjxknrvJMaqtD/FbwYsnVLiOysTdx7Na8ci/Sdsy/8caMMmqsjzWl5lTuAg
+Zw4DEN/wcZUm8TsazMXdpUtMCN7Sd8Y/20ao549MotTY75Xa4zNWSW5M0UKGjXcN
+KCfpYGdJklunrxQxz9ddPCiLgbjEcPF6OhfxAdtS/3TLUswEoL17yCoMkalDhSAN
+xAxiGS2pWc83GpHnLGJHEOlZrVl0+0/nCqzAKcKigZLH2XYOI9et/OHU0KmWe0mQ
+uz5S1LcRdcYYMkSQk3fllb1eBWd5KsRbTyhnZxeY1Fz50Yj3bjgQXbQNaqsx0mcE
+1+ZsEcDKp+R9at0G8LD03R3KlTuYWo/fH7G44mh4Lw/hBzQwU2DsK3MQIkYbSa2O
+hAjiFuniyUofVPV7axDBvSnLg6f+bbG+YdmmRyk70XAJJvoUnwIDAQABo4IDMTCC
+Ay0wHwYDVR0jBBgwFoAUbx01SRBsMvpZoJ68iugflb5xegwwHQYDVR0OBBYEFPEi
+wXKT2f4zD92plYMZg8vexgaBMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAA
+MB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJBgNVHSAEQjBAMDQGCysG
+AQQBsjEBAgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BT
+MAgGBmeBDAECAjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8vR0VBTlQuY3JsLnNl
+Y3RpZ28uY29tL0dFQU5UT1ZSU0FDQTQuY3JsMHUGCCsGAQUFBwEBBGkwZzA6Bggr
+BgEFBQcwAoYuaHR0cDovL0dFQU5ULmNydC5zZWN0aWdvLmNvbS9HRUFOVE9WUlNB
+Q0E0LmNydDApBggrBgEFBQcwAYYdaHR0cDovL0dFQU5ULm9jc3Auc2VjdGlnby5j
+b20wggGABgorBgEEAdZ5AgQCBIIBcASCAWwBagB2AN3cyjSV1+EWBeeVMvrHn/g9
+HFDf2wA6FBJ2Ciysu8gqAAABkP07uhwAAAQDAEcwRQIhALDNlg3OGcNv+RjjI6zJ
+RfNWoJR5FRoAmPf5H9vnhNZ6AiAGO59/L69RfdeyPhRHMMwSTY/SHGFL4DPvTQ6g
+pnl7fwB3AA3h8jAr0w3BQGISCepVLvxHdHyx1+kw7w5CHrR+Tqo0AAABkP07uf0A
+AAQDAEgwRgIhAKc/Vje0E2Y1pOFVgFOlvlInZmHWuHXSD5ghGkZcRyiRAiEAvaWh
+CaIhh3FTnk1DjNvzz9u3TDyHPiQ5L0wNH2zqPRQAdwAS8U40vVNyTIQGGcOPP3oT
++Oe1YoeInG0wBYTr5YYmOgAAAZD9O7n7AAAEAwBIMEYCIQCQlswQsjXKPmqoI49M
+o0M2YYbUH1lEoDi1Gt+TCk+E+AIhAPu2zyUlvFSB70m1Dqn+mc8pSEVeJUuYRHS0
+FWURIo3fMCcGA1UdEQQgMB6CHHNoaWJib2xldGgtdGVzdC50dS1iZXJsaW4uZGUw
+DQYJKoZIhvcNAQEMBQADggIBABJAvlooRImbsbCCTs24f1Amh3BJC10N/z/T184K
+0+hfJxTc/Y6rNGq24D66JLFSE8DxU4FTqrO4lgDXEwjxLDxwxgQugFDAPINqB3K7
+Qoj8GrtBKDWsmB2vmbQvkunhqphhAwI/exRV8ZRVOvRYEm12xpbW/07r4QA9FErL
+MUeP0IEtSdwPVmxp58FNqg4krzBDmRPR4j60lfFgV2e6ASxDM5oms3DmYtwDMlzh
+3SOo/ghfHRe78Pr2/Xe25SKaBB2gWrFFAGqzTbIeYHsVm+aAedcJJ12Ap4w8+PUu
+OgIrjVJRDRfy9Bz9HCd34D7UPyq3svy5VMrnPe4iSJBN5SPoKP4q2UvCqhCNvh+E
+zjZY70jEv4vU088qEYnP5K8rJRnENk1bqpuoqBzI2oY2+ypQ5H3zItCiinSetiED
+G198TSKvt1spLFHFMLBi5z1i2G6FO58JNGp+UBZmutKlAK9Q6Z87iT8imY30x+gg
+m7XC2E7j9crZTbvr19tcyh923AuvuedJUFt+bcpR1qV625aghSdGaw8jk2gDOJbd
+WkiG67neKRKa4y7y6T0YhcpgE8yD8FyPdgZfZIQBYrxK10/fByK8uzS85iw5FLse
+3aiBaA+VXkeWAtOJhSNxVJBdPNrw+gjDtOYM40Rn4gLrQ1i/gk3yInPi6ni+AXKi
+ujhA</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:KeyName>shibboleth-test.tu-berlin.de</ds:KeyName>
+                <ds:X509Data>
+                    <ds:X509SubjectName>CN=shibboleth-test.tu-berlin.de,O=Technische Universität Berlin,ST=Berlin,C=DE</ds:X509SubjectName>
+                    <ds:X509Certificate>MIIIbzCCBlegAwIBAgIQEvpFwE7eV2IQZ7lOdQsRmTANBgkqhkiG9w0BAQwFADBE
+MQswCQYDVQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEaMBgGA1UE
+AxMRR0VBTlQgT1YgUlNBIENBIDQwHhcNMjQwNzI5MDAwMDAwWhcNMjUwNzI5MjM1
+OTU5WjBuMQswCQYDVQQGEwJERTEPMA0GA1UECBMGQmVybGluMScwJQYDVQQKDB5U
+ZWNobmlzY2hlIFVuaXZlcnNpdMOkdCBCZXJsaW4xJTAjBgNVBAMTHHNoaWJib2xl
+dGgtdGVzdC50dS1iZXJsaW4uZGUwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQClsO37OqSANNkcDXEo3bz00+MaQpm65XDPxPlawcWM0Wxxuatw9odG07li
+ZAELXOT2vLGphn5QdtEapOciQl7Ik+wbEzeBZep8xSaSYlEYtV1xfSAeVd0pnhu8
+ZgOyF/EXecejJbOjGYuVBIzgWVEPhuBdfHFmYY0/cl48M+1EwViXsTQnvPuNzZTU
+AZG0toXYLfveNKqd70nMGDv5jaJw/pts7vtT4BALHwUppVL6vvsOUqzfOucVFVl/
+BEo7UvjxknrvJMaqtD/FbwYsnVLiOysTdx7Na8ci/Sdsy/8caMMmqsjzWl5lTuAg
+Zw4DEN/wcZUm8TsazMXdpUtMCN7Sd8Y/20ao549MotTY75Xa4zNWSW5M0UKGjXcN
+KCfpYGdJklunrxQxz9ddPCiLgbjEcPF6OhfxAdtS/3TLUswEoL17yCoMkalDhSAN
+xAxiGS2pWc83GpHnLGJHEOlZrVl0+0/nCqzAKcKigZLH2XYOI9et/OHU0KmWe0mQ
+uz5S1LcRdcYYMkSQk3fllb1eBWd5KsRbTyhnZxeY1Fz50Yj3bjgQXbQNaqsx0mcE
+1+ZsEcDKp+R9at0G8LD03R3KlTuYWo/fH7G44mh4Lw/hBzQwU2DsK3MQIkYbSa2O
+hAjiFuniyUofVPV7axDBvSnLg6f+bbG+YdmmRyk70XAJJvoUnwIDAQABo4IDMTCC
+Ay0wHwYDVR0jBBgwFoAUbx01SRBsMvpZoJ68iugflb5xegwwHQYDVR0OBBYEFPEi
+wXKT2f4zD92plYMZg8vexgaBMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAA
+MB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJBgNVHSAEQjBAMDQGCysG
+AQQBsjEBAgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BT
+MAgGBmeBDAECAjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8vR0VBTlQuY3JsLnNl
+Y3RpZ28uY29tL0dFQU5UT1ZSU0FDQTQuY3JsMHUGCCsGAQUFBwEBBGkwZzA6Bggr
+BgEFBQcwAoYuaHR0cDovL0dFQU5ULmNydC5zZWN0aWdvLmNvbS9HRUFOVE9WUlNB
+Q0E0LmNydDApBggrBgEFBQcwAYYdaHR0cDovL0dFQU5ULm9jc3Auc2VjdGlnby5j
+b20wggGABgorBgEEAdZ5AgQCBIIBcASCAWwBagB2AN3cyjSV1+EWBeeVMvrHn/g9
+HFDf2wA6FBJ2Ciysu8gqAAABkP07uhwAAAQDAEcwRQIhALDNlg3OGcNv+RjjI6zJ
+RfNWoJR5FRoAmPf5H9vnhNZ6AiAGO59/L69RfdeyPhRHMMwSTY/SHGFL4DPvTQ6g
+pnl7fwB3AA3h8jAr0w3BQGISCepVLvxHdHyx1+kw7w5CHrR+Tqo0AAABkP07uf0A
+AAQDAEgwRgIhAKc/Vje0E2Y1pOFVgFOlvlInZmHWuHXSD5ghGkZcRyiRAiEAvaWh
+CaIhh3FTnk1DjNvzz9u3TDyHPiQ5L0wNH2zqPRQAdwAS8U40vVNyTIQGGcOPP3oT
++Oe1YoeInG0wBYTr5YYmOgAAAZD9O7n7AAAEAwBIMEYCIQCQlswQsjXKPmqoI49M
+o0M2YYbUH1lEoDi1Gt+TCk+E+AIhAPu2zyUlvFSB70m1Dqn+mc8pSEVeJUuYRHS0
+FWURIo3fMCcGA1UdEQQgMB6CHHNoaWJib2xldGgtdGVzdC50dS1iZXJsaW4uZGUw
+DQYJKoZIhvcNAQEMBQADggIBABJAvlooRImbsbCCTs24f1Amh3BJC10N/z/T184K
+0+hfJxTc/Y6rNGq24D66JLFSE8DxU4FTqrO4lgDXEwjxLDxwxgQugFDAPINqB3K7
+Qoj8GrtBKDWsmB2vmbQvkunhqphhAwI/exRV8ZRVOvRYEm12xpbW/07r4QA9FErL
+MUeP0IEtSdwPVmxp58FNqg4krzBDmRPR4j60lfFgV2e6ASxDM5oms3DmYtwDMlzh
+3SOo/ghfHRe78Pr2/Xe25SKaBB2gWrFFAGqzTbIeYHsVm+aAedcJJ12Ap4w8+PUu
+OgIrjVJRDRfy9Bz9HCd34D7UPyq3svy5VMrnPe4iSJBN5SPoKP4q2UvCqhCNvh+E
+zjZY70jEv4vU088qEYnP5K8rJRnENk1bqpuoqBzI2oY2+ypQ5H3zItCiinSetiED
+G198TSKvt1spLFHFMLBi5z1i2G6FO58JNGp+UBZmutKlAK9Q6Z87iT8imY30x+gg
+m7XC2E7j9crZTbvr19tcyh923AuvuedJUFt+bcpR1qV625aghSdGaw8jk2gDOJbd
+WkiG67neKRKa4y7y6T0YhcpgE8yD8FyPdgZfZIQBYrxK10/fByK8uzS85iw5FLse
+3aiBaA+VXkeWAtOJhSNxVJBdPNrw+gjDtOYM40Rn4gLrQ1i/gk3yInPi6ni+AXKi
+ujhA</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://shibboleth-test.tu-berlin.de:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="1" />
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/POST/SLO" />
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/POST-SimpleSign/SLO" />
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/Redirect/SLO" />
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/POST/SSO" />
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/POST-SimpleSign/SSO" />
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/Redirect/SSO" />
+    </IDPSSODescriptor>
+    <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <Extensions>
+            <saml1md:Scope regexp="false">facultyvii.tu-berlin.de</saml1md:Scope>
+            <saml1md:Scope regexp="false">tu-berlin.de</saml1md:Scope>
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="de">Technische Universitaet Berlin Test-IDP V4</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="en">Technische Universitaet Berlin Test-IDP V4</mdui:DisplayName>
+                <mdui:Description xml:lang="de">Technische Universitaet Berlin Test-IDP V4</mdui:Description>
+                <mdui:Description xml:lang="en">Technische Universitaet Berlin Test-IDP V4</mdui:Description>
+                <mdui:Logo height="75" width="219">https://mdv.aai.dfn.de/media/logos/e160/tu-berlin-logo-long-red_S1CdFoK.png</mdui:Logo>
+            </mdui:UIInfo>
+        </Extensions>
+        <KeyDescriptor use="encryption">
+            <ds:KeyInfo>
+                <ds:KeyName>shibboleth-test.tu-berlin.de</ds:KeyName>
+                <ds:X509Data>
+                    <ds:X509SubjectName>CN=shibboleth-test.tu-berlin.de,O=Technische Universität Berlin,ST=Berlin,C=DE</ds:X509SubjectName>
+                    <ds:X509Certificate>MIIIbzCCBlegAwIBAgIQEvpFwE7eV2IQZ7lOdQsRmTANBgkqhkiG9w0BAQwFADBE
+MQswCQYDVQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEaMBgGA1UE
+AxMRR0VBTlQgT1YgUlNBIENBIDQwHhcNMjQwNzI5MDAwMDAwWhcNMjUwNzI5MjM1
+OTU5WjBuMQswCQYDVQQGEwJERTEPMA0GA1UECBMGQmVybGluMScwJQYDVQQKDB5U
+ZWNobmlzY2hlIFVuaXZlcnNpdMOkdCBCZXJsaW4xJTAjBgNVBAMTHHNoaWJib2xl
+dGgtdGVzdC50dS1iZXJsaW4uZGUwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQClsO37OqSANNkcDXEo3bz00+MaQpm65XDPxPlawcWM0Wxxuatw9odG07li
+ZAELXOT2vLGphn5QdtEapOciQl7Ik+wbEzeBZep8xSaSYlEYtV1xfSAeVd0pnhu8
+ZgOyF/EXecejJbOjGYuVBIzgWVEPhuBdfHFmYY0/cl48M+1EwViXsTQnvPuNzZTU
+AZG0toXYLfveNKqd70nMGDv5jaJw/pts7vtT4BALHwUppVL6vvsOUqzfOucVFVl/
+BEo7UvjxknrvJMaqtD/FbwYsnVLiOysTdx7Na8ci/Sdsy/8caMMmqsjzWl5lTuAg
+Zw4DEN/wcZUm8TsazMXdpUtMCN7Sd8Y/20ao549MotTY75Xa4zNWSW5M0UKGjXcN
+KCfpYGdJklunrxQxz9ddPCiLgbjEcPF6OhfxAdtS/3TLUswEoL17yCoMkalDhSAN
+xAxiGS2pWc83GpHnLGJHEOlZrVl0+0/nCqzAKcKigZLH2XYOI9et/OHU0KmWe0mQ
+uz5S1LcRdcYYMkSQk3fllb1eBWd5KsRbTyhnZxeY1Fz50Yj3bjgQXbQNaqsx0mcE
+1+ZsEcDKp+R9at0G8LD03R3KlTuYWo/fH7G44mh4Lw/hBzQwU2DsK3MQIkYbSa2O
+hAjiFuniyUofVPV7axDBvSnLg6f+bbG+YdmmRyk70XAJJvoUnwIDAQABo4IDMTCC
+Ay0wHwYDVR0jBBgwFoAUbx01SRBsMvpZoJ68iugflb5xegwwHQYDVR0OBBYEFPEi
+wXKT2f4zD92plYMZg8vexgaBMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAA
+MB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJBgNVHSAEQjBAMDQGCysG
+AQQBsjEBAgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BT
+MAgGBmeBDAECAjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8vR0VBTlQuY3JsLnNl
+Y3RpZ28uY29tL0dFQU5UT1ZSU0FDQTQuY3JsMHUGCCsGAQUFBwEBBGkwZzA6Bggr
+BgEFBQcwAoYuaHR0cDovL0dFQU5ULmNydC5zZWN0aWdvLmNvbS9HRUFOVE9WUlNB
+Q0E0LmNydDApBggrBgEFBQcwAYYdaHR0cDovL0dFQU5ULm9jc3Auc2VjdGlnby5j
+b20wggGABgorBgEEAdZ5AgQCBIIBcASCAWwBagB2AN3cyjSV1+EWBeeVMvrHn/g9
+HFDf2wA6FBJ2Ciysu8gqAAABkP07uhwAAAQDAEcwRQIhALDNlg3OGcNv+RjjI6zJ
+RfNWoJR5FRoAmPf5H9vnhNZ6AiAGO59/L69RfdeyPhRHMMwSTY/SHGFL4DPvTQ6g
+pnl7fwB3AA3h8jAr0w3BQGISCepVLvxHdHyx1+kw7w5CHrR+Tqo0AAABkP07uf0A
+AAQDAEgwRgIhAKc/Vje0E2Y1pOFVgFOlvlInZmHWuHXSD5ghGkZcRyiRAiEAvaWh
+CaIhh3FTnk1DjNvzz9u3TDyHPiQ5L0wNH2zqPRQAdwAS8U40vVNyTIQGGcOPP3oT
++Oe1YoeInG0wBYTr5YYmOgAAAZD9O7n7AAAEAwBIMEYCIQCQlswQsjXKPmqoI49M
+o0M2YYbUH1lEoDi1Gt+TCk+E+AIhAPu2zyUlvFSB70m1Dqn+mc8pSEVeJUuYRHS0
+FWURIo3fMCcGA1UdEQQgMB6CHHNoaWJib2xldGgtdGVzdC50dS1iZXJsaW4uZGUw
+DQYJKoZIhvcNAQEMBQADggIBABJAvlooRImbsbCCTs24f1Amh3BJC10N/z/T184K
+0+hfJxTc/Y6rNGq24D66JLFSE8DxU4FTqrO4lgDXEwjxLDxwxgQugFDAPINqB3K7
+Qoj8GrtBKDWsmB2vmbQvkunhqphhAwI/exRV8ZRVOvRYEm12xpbW/07r4QA9FErL
+MUeP0IEtSdwPVmxp58FNqg4krzBDmRPR4j60lfFgV2e6ASxDM5oms3DmYtwDMlzh
+3SOo/ghfHRe78Pr2/Xe25SKaBB2gWrFFAGqzTbIeYHsVm+aAedcJJ12Ap4w8+PUu
+OgIrjVJRDRfy9Bz9HCd34D7UPyq3svy5VMrnPe4iSJBN5SPoKP4q2UvCqhCNvh+E
+zjZY70jEv4vU088qEYnP5K8rJRnENk1bqpuoqBzI2oY2+ypQ5H3zItCiinSetiED
+G198TSKvt1spLFHFMLBi5z1i2G6FO58JNGp+UBZmutKlAK9Q6Z87iT8imY30x+gg
+m7XC2E7j9crZTbvr19tcyh923AuvuedJUFt+bcpR1qV625aghSdGaw8jk2gDOJbd
+WkiG67neKRKa4y7y6T0YhcpgE8yD8FyPdgZfZIQBYrxK10/fByK8uzS85iw5FLse
+3aiBaA+VXkeWAtOJhSNxVJBdPNrw+gjDtOYM40Rn4gLrQ1i/gk3yInPi6ni+AXKi
+ujhA</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <KeyDescriptor use="signing">
+            <ds:KeyInfo>
+                <ds:KeyName>shibboleth-test.tu-berlin.de</ds:KeyName>
+                <ds:X509Data>
+                    <ds:X509SubjectName>CN=shibboleth-test.tu-berlin.de,O=Technische Universität Berlin,ST=Berlin,C=DE</ds:X509SubjectName>
+                    <ds:X509Certificate>MIIIbzCCBlegAwIBAgIQEvpFwE7eV2IQZ7lOdQsRmTANBgkqhkiG9w0BAQwFADBE
+MQswCQYDVQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEaMBgGA1UE
+AxMRR0VBTlQgT1YgUlNBIENBIDQwHhcNMjQwNzI5MDAwMDAwWhcNMjUwNzI5MjM1
+OTU5WjBuMQswCQYDVQQGEwJERTEPMA0GA1UECBMGQmVybGluMScwJQYDVQQKDB5U
+ZWNobmlzY2hlIFVuaXZlcnNpdMOkdCBCZXJsaW4xJTAjBgNVBAMTHHNoaWJib2xl
+dGgtdGVzdC50dS1iZXJsaW4uZGUwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQClsO37OqSANNkcDXEo3bz00+MaQpm65XDPxPlawcWM0Wxxuatw9odG07li
+ZAELXOT2vLGphn5QdtEapOciQl7Ik+wbEzeBZep8xSaSYlEYtV1xfSAeVd0pnhu8
+ZgOyF/EXecejJbOjGYuVBIzgWVEPhuBdfHFmYY0/cl48M+1EwViXsTQnvPuNzZTU
+AZG0toXYLfveNKqd70nMGDv5jaJw/pts7vtT4BALHwUppVL6vvsOUqzfOucVFVl/
+BEo7UvjxknrvJMaqtD/FbwYsnVLiOysTdx7Na8ci/Sdsy/8caMMmqsjzWl5lTuAg
+Zw4DEN/wcZUm8TsazMXdpUtMCN7Sd8Y/20ao549MotTY75Xa4zNWSW5M0UKGjXcN
+KCfpYGdJklunrxQxz9ddPCiLgbjEcPF6OhfxAdtS/3TLUswEoL17yCoMkalDhSAN
+xAxiGS2pWc83GpHnLGJHEOlZrVl0+0/nCqzAKcKigZLH2XYOI9et/OHU0KmWe0mQ
+uz5S1LcRdcYYMkSQk3fllb1eBWd5KsRbTyhnZxeY1Fz50Yj3bjgQXbQNaqsx0mcE
+1+ZsEcDKp+R9at0G8LD03R3KlTuYWo/fH7G44mh4Lw/hBzQwU2DsK3MQIkYbSa2O
+hAjiFuniyUofVPV7axDBvSnLg6f+bbG+YdmmRyk70XAJJvoUnwIDAQABo4IDMTCC
+Ay0wHwYDVR0jBBgwFoAUbx01SRBsMvpZoJ68iugflb5xegwwHQYDVR0OBBYEFPEi
+wXKT2f4zD92plYMZg8vexgaBMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAA
+MB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJBgNVHSAEQjBAMDQGCysG
+AQQBsjEBAgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BT
+MAgGBmeBDAECAjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8vR0VBTlQuY3JsLnNl
+Y3RpZ28uY29tL0dFQU5UT1ZSU0FDQTQuY3JsMHUGCCsGAQUFBwEBBGkwZzA6Bggr
+BgEFBQcwAoYuaHR0cDovL0dFQU5ULmNydC5zZWN0aWdvLmNvbS9HRUFOVE9WUlNB
+Q0E0LmNydDApBggrBgEFBQcwAYYdaHR0cDovL0dFQU5ULm9jc3Auc2VjdGlnby5j
+b20wggGABgorBgEEAdZ5AgQCBIIBcASCAWwBagB2AN3cyjSV1+EWBeeVMvrHn/g9
+HFDf2wA6FBJ2Ciysu8gqAAABkP07uhwAAAQDAEcwRQIhALDNlg3OGcNv+RjjI6zJ
+RfNWoJR5FRoAmPf5H9vnhNZ6AiAGO59/L69RfdeyPhRHMMwSTY/SHGFL4DPvTQ6g
+pnl7fwB3AA3h8jAr0w3BQGISCepVLvxHdHyx1+kw7w5CHrR+Tqo0AAABkP07uf0A
+AAQDAEgwRgIhAKc/Vje0E2Y1pOFVgFOlvlInZmHWuHXSD5ghGkZcRyiRAiEAvaWh
+CaIhh3FTnk1DjNvzz9u3TDyHPiQ5L0wNH2zqPRQAdwAS8U40vVNyTIQGGcOPP3oT
++Oe1YoeInG0wBYTr5YYmOgAAAZD9O7n7AAAEAwBIMEYCIQCQlswQsjXKPmqoI49M
+o0M2YYbUH1lEoDi1Gt+TCk+E+AIhAPu2zyUlvFSB70m1Dqn+mc8pSEVeJUuYRHS0
+FWURIo3fMCcGA1UdEQQgMB6CHHNoaWJib2xldGgtdGVzdC50dS1iZXJsaW4uZGUw
+DQYJKoZIhvcNAQEMBQADggIBABJAvlooRImbsbCCTs24f1Amh3BJC10N/z/T184K
+0+hfJxTc/Y6rNGq24D66JLFSE8DxU4FTqrO4lgDXEwjxLDxwxgQugFDAPINqB3K7
+Qoj8GrtBKDWsmB2vmbQvkunhqphhAwI/exRV8ZRVOvRYEm12xpbW/07r4QA9FErL
+MUeP0IEtSdwPVmxp58FNqg4krzBDmRPR4j60lfFgV2e6ASxDM5oms3DmYtwDMlzh
+3SOo/ghfHRe78Pr2/Xe25SKaBB2gWrFFAGqzTbIeYHsVm+aAedcJJ12Ap4w8+PUu
+OgIrjVJRDRfy9Bz9HCd34D7UPyq3svy5VMrnPe4iSJBN5SPoKP4q2UvCqhCNvh+E
+zjZY70jEv4vU088qEYnP5K8rJRnENk1bqpuoqBzI2oY2+ypQ5H3zItCiinSetiED
+G198TSKvt1spLFHFMLBi5z1i2G6FO58JNGp+UBZmutKlAK9Q6Z87iT8imY30x+gg
+m7XC2E7j9crZTbvr19tcyh923AuvuedJUFt+bcpR1qV625aghSdGaw8jk2gDOJbd
+WkiG67neKRKa4y7y6T0YhcpgE8yD8FyPdgZfZIQBYrxK10/fByK8uzS85iw5FLse
+3aiBaA+VXkeWAtOJhSNxVJBdPNrw+gjDtOYM40Rn4gLrQ1i/gk3yInPi6ni+AXKi
+ujhA</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://shibboleth.tubit.tu-berlin.de:8443/idp/profile/SAML2/SOAP/AttributeQuery" />
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+    </AttributeAuthorityDescriptor>
+    <Organization>
+        <OrganizationName xml:lang="de">e160</OrganizationName>
+        <OrganizationName xml:lang="en">e160</OrganizationName>
+        <OrganizationDisplayName xml:lang="de">Technische Universität Berlin</OrganizationDisplayName>
+        <OrganizationDisplayName xml:lang="en">Technische Universität Berlin</OrganizationDisplayName>
+        <OrganizationURL xml:lang="de">http://www.tu-berlin.de</OrganizationURL>
+        <OrganizationURL xml:lang="en">http://www.tu-berlin.de</OrganizationURL>
+    </Organization>
+    <ContactPerson contactType="other" remd:contactType="http://refeds.org/metadata/contactType/security">
+        <GivenName>Thomas</GivenName>
+        <SurName>Gebhardt</SurName>
+        <EmailAddress>mailto:Thomas.Gebhardt.1@tu-berlin.de</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="support">
+        <GivenName>Thomas</GivenName>
+        <SurName>Gebhardt</SurName>
+        <EmailAddress>mailto:Thomas.Gebhardt.1@tu-berlin.de</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="technical">
+        <GivenName>Thomas</GivenName>
+        <SurName>Gebhardt</SurName>
+        <EmailAddress>mailto:Thomas.Gebhardt.1@tu-berlin.de</EmailAddress>
+    </ContactPerson>
+</EntityDescriptor>
+</EntitiesDescriptor>

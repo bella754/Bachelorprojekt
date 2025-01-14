@@ -5,42 +5,69 @@ import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
 import fs from 'fs';
 import { getAllUsers, createUser, createActivity, updateActivity, getActivities, getSingleActivity, deleteActivity, getActivitiesFromUser, getUsersWithActivities } from './database.js';
-
-const thesisSchemaPath = './schemas/thesis.json'; 
-const courseSchemaPath = './schemas/course.json';
-const publicationSchemaPath = './schemas/publication.json';
-const fundingSchemaPath = './schemas/funding.json';
+import passport from './passportConfig.js';
+import session from 'express-session';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
 
-
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-app.listen(3000, () => {
-    console.log("Listen on http://localhost:3000");
+//----------------------------------------------------
+// Passport ------------------------------------------
+//----------------------------------------------------
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Login-Route
+app.get('/login', passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }));
+
+// SAML-Callback-Route
+app.post(
+  '/login/callback',
+  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  (req, res) => {
+    res.redirect('/dashboard'); // Weiterleitung nach erfolgreichem Login
+  }
+);
+
+// Logout-Route
+app.get('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('/');
+  });
 });
 
-// Ajv-Instanz erstellen -> zum Schema validieren
-const ajv = new Ajv();
-ajv.addKeyword("inputType");
-ajv.addKeyword("name");
+//----------------------------------------------------
+// Schema Validation ---------------------------------
+//----------------------------------------------------
+const ajv = new Ajv(); // Ajv-Instanz erstellen -> zum Schema validieren
 
-// JSON-Schemata laden und kompilieren
-const thesisSchema = JSON.parse(fs.readFileSync(thesisSchemaPath, 'utf8'));
-const validateThesis = ajv.compile(thesisSchema);
+const schemaDir = './schemas/new/';
+const schemaFiles = fs.readdirSync(schemaDir);
+const validators = {};
 
-const courseSchema = JSON.parse(fs.readFileSync(courseSchemaPath, 'utf8'));
-const validateCourse = ajv.compile(courseSchema);
-
-const publicationSchema = JSON.parse(fs.readFileSync(publicationSchemaPath, 'utf8'));
-const validatePublication = ajv.compile(publicationSchema);
-
-const fundingPath = JSON.parse(fs.readFileSync(fundingSchemaPath, 'utf8'));
-const validateFunding = ajv.compile(fundingPath);
+schemaFiles.forEach((file) => {
+    const schemaName = file.replace('.json', '');
+    const schemaPath = path.join(schemaDir, file); 
+    const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8')); 
+    validators[schemaName] = ajv.compile(schema); 
+});
+// console.log("validators: ", validators);
 
 
 //-----------------------------------------------------
@@ -94,7 +121,8 @@ app.get('/api/activity/:id', async (req, res) => {
 
 /**
 * FUNKTIONIERT
-* @TODO : finished state mit einbauen -> default: false
+* @TODO : ausstellungen und orga mit bool werten müssen noch geändert 
+*         dann zum laufen gebracht werdens
 */
 app.post('/api/new-activity/:type', async (req, res) => {   
     // Validierung der Eingabedaten
@@ -102,79 +130,203 @@ app.post('/api/new-activity/:type', async (req, res) => {
     const type = req.params.type;
     // console.log("type: ", type);
 
-    if (type == "thesis") {
-        // console.log("type: thesis");
+    if (type == "aemter-und-gremienaktivitaet-an-der-tu-berlin") {
         
-        const isValid = validateThesis(req.body);
+        const validate = validators[type]
+        const isValid = validate(req.body);
 
         if (!isValid) {
-            return res.status(400).json({ errors: validateThesis.errors });
+            return res.status(400).json({ errors: validateAemter.errors });
         }
 
         try {
             // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newThesis = await createActivity("Abschlussarbeit", req.body);
+            const newActivity = await createActivity("Aemter ud Gremienaktivität", req.body);
 
-            res.status(200).json(newThesis);
+            res.status(200).json(newActivity);
         } catch (error) {
-            console.error("Error creating thesis:", error);
-            res.status(500).json({ error: 'Error creating thesis' });
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
         }
-    } else if (type == "course") {
-        // console.log("type: course");
+    } else if (type == "ausstellungen-und-messen") {
 
-        const isValid = validateCourse(req.body);
+        const validate = validators[type]
+        const isValid = validate(req.body);
 
         if (!isValid) {
-            console.log("course not valid");
-            return res.status(400).json({ errors: validateCourse.errors });
+            return res.status(400).json({ errors: validateAusstellung.errors });
         }
 
         try {
             // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newCourse = await createActivity("Kurs", req.body);
+            const newActivity = await createActivity("Ausstellungen und Messen", req.body);
 
-            res.status(200).json(newCourse);
+            res.status(200).json(newActivity);
         } catch (error) {
-            console.error("Error creating course:", error);
-            res.status(500).json({ error: 'Error creating course' });
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
         }
-    } else if (type == "publication") {
-        // console.log("type: publication");
+    } else if (type == "begutachtungs-und-beratungsfunktionen") {
 
-        const isValid = validatePublication(req.body);
+        const validate = validators[type]
+        const isValid = validate(req.body);
 
         if (!isValid) {
-            return res.status(400).json({ errors: validatePublication.errors });
+            return res.status(400).json({ errors: validateBegutachtung.errors });
         }
 
         try {
             // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newPublication = await createActivity("Publikation", req.body);
+            const newActivity = await createActivity("Begutachtungs und Beratungsfunktionen", req.body);
 
-            res.status(200).json(newPublication);
+            res.status(200).json(newActivity);
         } catch (error) {
-            console.error("Error creating publication:", error);
-            res.status(500).json({ error: 'Error creating publication' });
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
         }
-    } else if (type == "funding") {
-        // console.log("type: funding");
+    } else if (type == "einrichtung-eines-internationalen-studiengangs") {
 
-        const isValid = validateFunding(req.body);
+        const validate = validators[type]
+        const isValid = validate(req.body);
 
         if (!isValid) {
-            console.log("funding not valid");
-            return res.status(400).json({ errors: validateFunding.errors });
+            return res.status(400).json({ errors: validateIntStudiengang.errors });
         }
 
         try {
             // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newFunding = await createActivity("Spende", req.body);
+            const newActivity = await createActivity("Einrichtung eines internationalen Studiengangs", req.body);
 
-            res.status(200).json(newFunding);
+            res.status(200).json(newActivity);
         } catch (error) {
-            console.error("Error creating funding:", error);
-            res.status(500).json({ error: 'Error creating funding' });
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "elektronische-veroeffentlichungen") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validateElektVeroeffent.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, aktivität weiterverarbeiten
+            const newActivity = await createActivity("Elektronische Veröffentlichungen", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "lehre-pruefungsleistungen-bachelor-master") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validateAbschlussarbeit.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
+            const newActivity = await createActivity("Lehre - Prüfungsleistungen Bachelor", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "organisation-ausrichtung-von-tagungen-konferenzen") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validateOrgaTagung.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
+            const newActivity = await createActivity("Organisation/Ausrichtung von Tagungen/Konferenzen", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "publikationen-in-sammelbaenden") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validatePublikationSammel.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
+            const newActivity = await createActivity("Publikationen in Sammelbänden", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "publikationen-in-wissenschaftlichen-fachzeitschriften") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validatePublikationZeitschr.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
+            const newActivity = await createActivity("Publikationen in wissenschaftlichen Fachzeitschriften", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "tu-interne-promotionen-fakultaetszentrale-erfassung") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validateInternePromotion.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
+            const newActivity = await createActivity("TU-interne Promotionen (fakultätszentrale Erfassung)", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
+        }
+    }  else if (type == "vortrag-auf-tagungen-konferenzen") {
+
+        const validate = validators[type]
+        const isValid = validate(req.body);
+
+        if (!isValid) {
+            return res.status(400).json({ errors: validateVortrag.errors });
+        }
+
+        try {
+            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
+            const newActivity = await createActivity("Vortrag auf Tagungen/Konferenzen", req.body);
+
+            res.status(200).json(newActivity);
+        } catch (error) {
+            console.error("Error creating activity:", error);
+            res.status(500).json({ error: 'Error creating activity' });
         }
     } else {
         res.status(404).json("No activity found")
@@ -203,7 +355,11 @@ app.post('/api/send-data', async (req, res) => {
     }
 });
 
-/* FUNKTIONIERT */
+/* 
+* FUNKTIONIERT 
+* Beispielaufruf in Postman: PUT http://localhost:3000/api/update-activity 
+* mit body { "activityID": "677eab863a2c3c5edbd6bb4b", "properties": {"Vorname": "neuer eintrag"}}
+*/
 app.put('/api/update-activity', async (req, res) => {
     // console.log("in update activity backend");
     const { activityID, properties } = req.body;    
@@ -234,46 +390,36 @@ app.get('/api/users-with-activities', async (req, res) => {
 });
 
 
+
 //-----------------------------------------------------------
-// OLD ------------------------------------------------------
+// Moses TEST        WORKED - YAYY                         --
 //-----------------------------------------------------------
+app.get('/api/moses', async (req, res) => {
+    fetch("https://moseskonto.tu-berlin.de/moses/api/v1/ping", { // '/ping' hinzugefügt
+        method: "GET",
+        headers: {
+            "x-api-key": process.env.MOSES_TOKEN
+        }
+    })
+    .then(response => { 
+        if (response.ok) {
+            return response.text(); // Da die API laut Doku nur "pong" als Text zurückgibt
+        } else {
+            res.status(response.status).send(`Server returned ${response.status}: ${response.statusText}`);
+        }                
+    })
+    .then(result => {
+        res.status(200).send(result); // Sende das Ergebnis zurück
+    })
+    .catch(err => {
+        console.error("Fetch error:", err);
+        res.status(500).send("Error fetching data");
+    });
+});
 
-/* alte users with activities funktion idee*/
-app.get('/api/activities/:userID', async (req, res) => {
-    // console.log("user id in backend: ", req.params.userID);
-    const activities = await getActivitiesFromUser(req.params.userID);
-    res.status(200).json(activities)
-})
 
 
-app.post('/api/new-course', async (req, res) => {  
-    console.log("in backend with req.body: ", req.body);
-     
-    const {name, numberOfStudents, lecturer, semester } = req.body; 
-    // Validierung der Eingabedaten
-    const isValid = validateCourse(req.body);
-
-    if (!isValid) {
-        return res.status(400).json({ errors: validateCourse.errors });
-    }
-
-    try {
-        // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-        const newCourse = {
-            activity: "Kurs",
-            createdAt: formatDateTime(new Date()),
-            userID: 1,      // später über eingeloggten User
-            properties: {
-                name,
-                numberOfStudents,
-                lecturer,
-                semester
-            }
-        };
-
-        res.status(200).json(newCourse);
-    } catch (error) {
-        console.error("Error creating course:", error);
-        res.status(500).json({ error: 'Error creating course' });
-    }
+// Server starten
+app.listen(3000, () => {
+    console.log("Listen on http://localhost:3000");
 });
