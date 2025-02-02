@@ -2,23 +2,32 @@
     import { ref } from 'vue';
     import Sidenavigation from "@/components/Sidenavigation.vue";
     import schema from '@schemas/new/aemter-und-gremienaktivitaet-an-der-tu-berlin.json';
+    import { useRoute } from "vue-router";
+
+    const route = useRoute();
+    const userID = ref(route.query.userID);  // userID aus der URL-Query auslesen
+    //console.log("userID in formular: ", userID);
+    
 
     const formData = ref({});
     const schemaProperties = schema.properties;
-    // console.log("schema title: ", schema.title);
-    
 
-    // Initialize formData based on schemaProperties
+    const requiredFields = schema.required || [];
+
+    // Initialize formData based on schema
     Object.keys(schemaProperties).forEach(key => {
         formData.value[key] = '';         
     });
 
     // handle form submission
     async function submit_form() {
-        console.log("formData in frontend: ", formData.value);
+        //console.log("formData in frontend: ", formData.value);
+        // console.log("userID in formular: ", userID);
         
         try {
-            const response = await fetch('/api/new-activity/aemter-und-gremienaktivitaet-an-der-tu-berlin', {
+            //console.log("right before fetch userid: ", userID);
+            //console.log("right before fetch userid.value: ", userID.value);
+            const response = await fetch(`/api/new-activity/aemter-und-gremienaktivitaet-an-der-tu-berlin/${userID.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -27,7 +36,7 @@
             });
             
             const data = await response.json();
-            console.log("Data received from backend:", data);
+            // console.log("Data received from backend:", data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
@@ -45,6 +54,8 @@
             event.preventDefault();
         }
     }
+
+    
 </script>
 
 <template>
@@ -52,29 +63,28 @@
     <div class="form_container">
         <h1 class="form_headline">{{ schema.title }}</h1>
         <form class="form">
-            <div v-for="(field, key) in schemaProperties" :key="key">
+            <div v-for="key in requiredFields" :key="key">
                 <label class="form_label" :for="key">{{ key }}</label>
-                <p class="form_description" v-if="field.description">{{ field.description }}</p>
+                <p class="form_description" v-if="schemaProperties[key].description">{{ schemaProperties[key].description }}</p>
                 
-                <select v-if="field.enum" class="form_input" :id="key" v-model="formData[key]">
-                    <option v-for="option in field.enum" :key="option" :value="option">{{ option }}</option>
+                <select v-if="schemaProperties[key].enum" class="form_input" :id="key" v-model="formData[key]">
+                    <option v-for="option in schemaProperties[key].enum" :key="option" :value="option">{{ option }}</option>
                 </select>
                 
-                <textarea v-else-if="field.type === 'textarea'" class="form_input form_input_textarea" :id="key" v-model="formData[key]" :placeholder="'Bitte ' + key + ' angeben'" />
+                <textarea v-else-if="schemaProperties[key].type === 'textarea'" class="form_input form_input_textarea" :id="key" v-model="formData[key]" :placeholder="'Bitte ' + key + ' angeben'" />
                 
-                <input v-else-if="field.type === 'integer'" step="1" min="0" placeholder="Nur ganze Zahlen" class="form_input" :id="key" v-model="formData[key]" type="number" @keydown="preventNonInteger"/>
+                <input v-else-if="schemaProperties[key].type === 'integer'" step="1" min="0" placeholder="Nur ganze Zahlen" class="form_input" :id="key" v-model="formData[key]" type="number" @keydown="preventNonInteger"/>
 
-                <input v-else-if="field.type === 'string'" class="form_input" :id="key" v-model="formData[key]" type="text" :placeholder="'Bitte ' + key + ' angeben'" />
+                <input v-else-if="schemaProperties[key].type === 'string'" class="form_input" :id="key" v-model="formData[key]" type="text" :placeholder="'Bitte ' + key + ' angeben'" />
 
-                <input v-else-if="field.type === 'number'" class="form_input" :id="key" v-model="formData[key]" type="number" />
+                <input v-else-if="schemaProperties[key].type === 'number'" class="form_input" :id="key" v-model="formData[key]" type="number" />
                 
-                <input v-else-if="field.type === 'date'" class="form_input" :id="key" v-model="formData[key]" type="date" />
+                <input v-else-if="schemaProperties[key].type === 'date'" class="form_input" :id="key" v-model="formData[key]" type="date" />
             </div>
         </form>
         <button class="form_submit" @click="submit_form()">Erstellen</button>
     </div>
 </template>
-
 
 <style scoped>
     .form_container {

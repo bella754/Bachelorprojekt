@@ -31,8 +31,7 @@
   "required": [
     "Modulprüf.(mü)",
     "Modulprüf.(s)",
-    "Modulprüf.(ps)",
-    "Matrikelnr."
+    "Modulprüf.(ps)"
   ],
   "additionalProperties": false
 }

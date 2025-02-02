@@ -21,7 +21,7 @@
     }
 
     function showActivity(activity) {
-        console.log("in showActivity function with activity: ", activity, activity._id);
+        // console.log("in showActivity function with activity: ", activity, activity._id);
         router.push({ name: 'Entry', params: { activityId: activity._id } });
     }
 

@@ -3,28 +3,54 @@
     import { ref, onMounted } from 'vue';
 
     const entries = ref([]);
+    const user = ref(null);
 
     async function send_data() {
-        console.log("in send data function with entries: ", entries.value);
+        // console.log("in send data function with entries: ", entries.value);
         try {
-            const response = await fetch('/api/send-data', {
+            const response = await fetch(`/api/send-data/${user.value._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(entries.value)
+                // body: JSON.stringify(entries.value)
             });
             
             const backend_data = await response.json();
-            console.log("Data received:", backend_data);
+            // console.log("Data received:", backend_data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
     }
 
-    onMounted(async () => {
+    async function getUser() {
         try {
-            const response = await fetch('/api/all-activities', {
+            const response = await fetch('/dashboard', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            if (result && result.user) {
+                user.value = result.user; // User-Daten speichern
+                // console.log("result in my_entries: ", result);                
+            }
+        } catch (error) {
+            console.error("Error getting user data:", error);
+        } 
+    }
+
+    onMounted(async () => {
+          await getUser();
+          // console.log("user in my_entries: ", user);
+          
+          const userID = user.value._id;
+          // console.log("userID in my_entries: ", userID);
+
+          try {
+            const response = await fetch(`/api/user-all-activities/${userID}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,11 +58,12 @@
             });
             
             entries.value = await response.json();
-            // console.log("Data received:", entries.value);
+            // console.log("Data received in my_entries:", entries.value);
         } catch (error) {
             console.error("Error getting data:", error);
-        }    
-    })
+        }  
+    });
+    
 </script>
 
 <template>

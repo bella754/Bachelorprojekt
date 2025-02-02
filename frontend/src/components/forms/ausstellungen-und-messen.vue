@@ -2,6 +2,10 @@
     import { ref } from 'vue';
     import Sidenavigation from "@/components/Sidenavigation.vue";
     import schema from '@schemas/new/ausstellungen-und-messen.json';
+    import { useRoute } from "vue-router";
+
+    const route = useRoute();
+    const userID = ref(route.query.userID);
 
     const formData = ref({});
     const schemaProperties = schema.properties;
@@ -18,7 +22,7 @@
         console.log("formData in frontend: ", formData.value);
         
         try {
-            const response = await fetch('/api/new-activity/ausstellungen-und-messen', {
+            const response = await fetch(`/api/new-activity/ausstellungen-und-messen/${userID.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -27,7 +31,7 @@
             });
             
             const data = await response.json();
-            console.log("Data received from backend:", data);
+            // console.log("Data received from backend:", data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
@@ -52,24 +56,6 @@
     <div class="form_container">
         <h1 class="form_headline">{{ schema.title }}</h1>
         <form class="form">
-            <!-- <div v-for="(field, key) in schemaProperties" :key="key">
-                <label class="form_label" :for="key">{{ key }}</label>
-                <p class="form_description" v-if="field.description">{{ field.description }}</p>
-                
-                <select v-if="field.enum" class="form_input" :id="key" v-model="formData[key]">
-                    <option v-for="option in field.enum" :key="option" :value="option">{{ option }}</option>
-                </select>
-                
-                <textarea v-else-if="field.type === 'textarea'" class="form_input form_input_textarea" :id="key" v-model="formData[key]" :placeholder="'Bitte ' + key + ' angeben'" />
-                
-                <input v-else-if="field.type === 'integer'" step="1" min="0" placeholder="Nur ganze Zahlen" class="form_input" :id="key" v-model="formData[key]" type="number" @keydown="preventNonInteger"/>
-
-                <input v-else-if="field.type === 'string'" class="form_input" :id="key" v-model="formData[key]" type="text" :placeholder="'Bitte ' + key + ' angeben'" />
-
-                <input v-else-if="field.type === 'number'" class="form_input" :id="key" v-model="formData[key]" type="number" />
-                
-                <input v-else-if="field.type === 'date'" class="form_input" :id="key" v-model="formData[key]" type="date" />
-            </div> -->
             <div v-for="key in requiredFields" :key="key">
                 <label class="form_label" :for="key">{{ key }}</label>
                 <p class="form_description" v-if="schemaProperties[key].description">{{ schemaProperties[key].description }}</p>

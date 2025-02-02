@@ -12,6 +12,7 @@
         <RouterLink class="sidenavigation_link" to="/new_entry">Neuen Eintrag</RouterLink>
         <RouterLink class="sidenavigation_link" to="/all_entries">Alle Einträge</RouterLink>
         <RouterLink class="sidenavigation_link" to="/users">Mitarbeitende verwalten</RouterLink>
+        <a class="sidenavigation_link" href="https://shibboleth-test.tu-berlin.de/idp/profile/Logout">Logout</a>
       </div>
       
     </div>

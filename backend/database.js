@@ -52,6 +52,26 @@ export async function getSingleUser(inputID) {
     }
 }
 
+/* Get users via email. FUNKTIONIERT */
+export async function getSingleUserEmail(inputEmail) {
+    try {
+        await client.connect();
+
+        const database = client.db('Horus');
+        const usersCollection = database.collection('users');
+
+        const user = await usersCollection.findOne({ email: inputEmail });
+        // console.log("user in database.js: ", user);
+        
+
+        // console.log("Found user: ", user);
+        return user;
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+
 export async function createUser(inputName, inputEmail, inputDepartment) {
     try {
         await client.connect();
@@ -109,17 +129,20 @@ export async function getActivities() {
  * Update activity. FUNKTIONIERT -- MUSS SPÄTER MIT RICHTIGEN 
  *                  ID's und ObjectId angepasst werden
  * @param {string} inputUserID - ID of the User.
+ * um alle aktivitäten von einem user zu bekommen
  */
 export async function getActivitiesFromUser(inputUserID) {
+    console.log("userID in database.js: ", inputUserID);
+    const userID = ObjectId.createFromHexString(inputUserID);
+
     try {
         await client.connect();
 
         const database = client.db('Horus');
         const activitiesCollection = database.collection('activities');
 
-        const activities = await activitiesCollection.find({ userID: Number(inputUserID) }).toArray();
-
-        // console.log(`Found activities for user with userID ${inputUserID}: `, activities);
+        const activities = await activitiesCollection.find({ userID: userID }).toArray();
+        console.log(`Database: Found activities for user with userID ${inputUserID}: `, activities);
         return activities;
     } finally {
         // Ensures that the client will close when you finish/error
@@ -153,165 +176,28 @@ export async function getSingleActivity(inputID) {
  * @param {string} activityTitle - Name of the activity.
  * @param {Object} data - The data to update.
  */
-export async function createActivity(activityTitle, inputData) {
-    
+export async function createActivity(activityTitle, inputData, inputUserID) {
+    const userID = ObjectId.createFromHexString(inputUserID);
+
     try {
         await client.connect();
-
         const database = client.db('Horus');
         const activitiesCollection = database.collection('activities');
 
-        if (activityTitle == "Aemter ud Gremienaktivität") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Aemter ud Gremienaktivität",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Ausstellungen und Messen") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Ausstellungen und Messen",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Begutachtungs und Beratungsfunktionen") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Begutachtungs und Beratungsfunktionen",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Einrichtung eines internationalen Studiengangs") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Einrichtung eines internationalen Studiengangs",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Elektronische Veröffentlichungen") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Elektronische Veröffentlichungen",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Lehre - Prüfungsleistungen Bachelor") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Lehre - Prüfungsleistungen Bachelor",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Organisation/Ausrichtung von Tagungen/Konferenzen") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Organisation/Ausrichtung von Tagungen/Konferenzen",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Publikationen in Sammelbänden") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Publikationen in Sammelbänden",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Publikationen in wissenschaftlichen Fachzeitschriften") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Publikationen in wissenschaftlichen Fachzeitschriften",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "TU-interne Promotionen (fakultätszentrale Erfassung)") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "TU-interne Promotionen (fakultätszentrale Erfassung)",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else if(activityTitle == "Vortrag auf Tagungen/Konferenzen") {
-            const activity = await activitiesCollection.insertOne(
-                {
-                    activity: "Vortrag auf Tagungen/Konferenzen",
-                    createdAt: formatDateTime(new Date()),
-                    userID: 2,      // später über eingeloggten User
-                    finished: false,
-                    properties: inputData
-                }
-            );
-    
-            // console.log("Created activity: ", activity);
-            return activity;
-        } else {
-            console.log("kein passendes schema");
-            
-        }
+        const activity = {
+            activity: activityTitle,
+            createdAt: formatDateTime(new Date()),
+            userID: userID,  
+            finished: false,
+            properties: inputData
+        };
+
+        const result = await activitiesCollection.insertOne(activity);
+        // console.log("Created activity:", result);
+        return result;
     } finally {
-        // Ensures that the client will close when you finish/error
         await client.close();
-    }      
+    }
 }
 
 /**
@@ -346,6 +232,8 @@ export async function updateActivity(inputID, updateInputs) {
     }
 }
 
+
+
 /**
  * Delete activity. FUNKTIONIERT
  * @param {string} inputID - ID of the activity
@@ -367,7 +255,8 @@ export async function deleteActivity(inputID) {
     }
 }
 
-export async function getUsersWithActivities() {
+// ist die richtige für All_Activities.vue
+/*export async function getUsersWithActivities() {
     try {
         await client.connect();
 
@@ -391,7 +280,76 @@ export async function getUsersWithActivities() {
         // Ensure the client is closed
         await client.close();
     }
+}*/
+
+/**
+ * FUNKTIONIERT 
+ */
+export async function getUsersWithActivities() {
+    try {
+        await client.connect();
+
+        const database = client.db('Horus');
+        const usersCollection = database.collection('users');
+
+        const usersWithActivities = await usersCollection.aggregate([
+            {
+                $lookup: {
+                    from: 'activities', 
+                    localField: '_id',   // `_id` aus `users`
+                    foreignField: 'userID',  // `userID` als ObjectId in `activities`
+                    as: 'activities'
+                }
+            },
+            {
+                $addFields: {
+                    activities: {
+                        $filter: {
+                            input: "$activities",
+                            as: "activity",
+                            cond: { $eq: ["$$activity.finished", true] }  // Nur Aktivitäten mit `finished: true`
+                        }
+                    }
+                }
+            }
+        ]).toArray();
+
+        // console.log("Users with finished activities: ", usersWithActivities);
+        return usersWithActivities;
+    } finally {
+        await client.close();
+    }
 }
+
+
+
+export async function setFinishState(inputID) {
+    // console.log("userID in database.js: ", inputID);
+    const userID = ObjectId.createFromHexString(inputID);
+
+    
+    try {
+        await client.connect();
+
+        const database = client.db('Horus');
+        const activitiesCollection = database.collection('activities');
+
+        // Update alle Aktivitäten des Nutzers mit finished: false auf finished: true
+        const result = await activitiesCollection.updateMany(
+            { userID: userID, finished: false },  // Bedingung: Passende Aktivitäten des Nutzers finden
+            { $set: { finished: true } }  // Update: Setze finished auf true
+        );
+
+        console.log(`Updated ${result.modifiedCount} activities to finished.`);
+
+        return result;
+    } catch (error) {
+        console.error("Error updating activities:", error);
+    } finally {
+        await client.close();
+    }
+}
+
 
 // import { MongoClient, ServerApiVersion } from 'mongodb';
 // const uri = "mongodb+srv://admin:admin123@cluster0.jzmel.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";

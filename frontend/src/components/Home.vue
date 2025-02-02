@@ -1,16 +1,46 @@
 <script setup>
+    import { ref, onMounted } from "vue";
     import Sidenavigation from "./Sidenavigation.vue";
     import { send_data, get_data } from "../helper";
 
     import data from '../../../backend/testData/listing.json';
-    // console.log("data in home.vue: ", data);
+
+    // Referenz für user & Loading-Status
+    const user = ref(null);
+    const isLoading = ref(true);
+
+    async function getUser() {
+        try {
+            const response = await fetch('/dashboard', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            if (result && result.user) {
+                user.value = result.user; // User-Daten speichern
+            }
+        } catch (error) {
+            console.error("Error getting user data:", error);
+        } finally {
+            isLoading.value = false; // Laden abgeschlossen
+        }
+    }
+
+    onMounted(getUser);
 </script>
+
 
 <template>
     <Sidenavigation class="sidenavigation"></Sidenavigation>
-    <div class="home_container">
+    
+    <div v-if="isLoading">Lade Benutzerdaten...</div>
+
+    <div v-else class="home_container">
         <div class="home_headline">
-            <h1>Welcome back User1 !</h1>
+            <h1>Wilkommen zurück {{ user.name }}!</h1>
         </div>
         <div class="home">
             <RouterLink class="home_item" to="/my_entries">
