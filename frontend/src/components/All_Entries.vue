@@ -30,6 +30,22 @@
         expandedUsers[userId] = !expandedUsers[userId];
     }
 
+    // Funktion für den Excel-Export
+    async function exportToExcel() {
+        try {
+            const response = await fetch('/api/export-excel');
+            if (!response.ok) throw new Error("Fehler beim Herunterladen der Datei");
+
+            const blob = await response.blob();
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "aktivitäten.xlsx";
+            link.click();
+        } catch (error) {
+            console.error("Fehler beim Export:", error);
+        }
+    }
+
     // Daten beim Laden abrufen
     onMounted(fetchUsersWithActivities);
 </script>
@@ -37,6 +53,8 @@
 <template>
     <Sidenavigation></Sidenavigation>
     <div class="all-entries">
+        <h1 class="all-entries_headline">Alle Einträge</h1>
+        <button class="button" @click="exportToExcel">Excel Export</button>
         <div class="kanban_board">
             <!-- Kanban-Spalten für jeden Nutzer -->
             <div v-for="user in usersWithActivities" :key="user._id" class="kanban_column">
@@ -122,5 +140,17 @@
         margin-top: 10px;
         width: 100%;
         text-align: center;
+    }
+
+    .button {
+        border: 1px solid #c02020;
+        border-radius: 6px;
+        padding: 7px 10px;
+        background-color: #c02020;
+        color: white;
+        margin-top: 10px;
+        position: absolute;
+        right: 0;
+        cursor: pointer;
     }
 </style>

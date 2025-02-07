@@ -1,25 +1,54 @@
 <script setup>
-  import { RouterLink, RouterView } from 'vue-router'
+  import { RouterLink, RouterView } from 'vue-router';
+  import { ref, onMounted } from "vue";
+  
+  const user = ref(null);
+    const isLoading = ref(true);
+
+    async function getUser() {
+        try {
+            const response = await fetch('/current-user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            if (result && result.user) {
+                user.value = result.user; // User-Daten speichern
+            }
+        } catch (error) {
+            console.error("Error getting user data:", error);
+        } finally {
+            isLoading.value = false; // Laden abgeschlossen
+        }
+    }
+
+
+  onMounted(getUser);
+    
 </script>
 
 <template>
-  <div class="sidenavigation">
+  <div v-if="isLoading">Lade Daten...</div>
+  <div v-else class="sidenavigation">
     <div class="sidenavigation_header">
       <img class="sidenavogation_logo" src="../assets/tu-berlin-logo.svg" alt="Logo TU Berlin">
       <div class="sidenavigation_links">
         <RouterLink class="sidenavigation_link" to="/">Home</RouterLink>
         <RouterLink class="sidenavigation_link" to="/my_entries">Meine Einträge</RouterLink>
         <RouterLink class="sidenavigation_link" to="/new_entry">Neuen Eintrag</RouterLink>
-        <RouterLink class="sidenavigation_link" to="/all_entries">Alle Einträge</RouterLink>
-        <RouterLink class="sidenavigation_link" to="/users">Mitarbeitende verwalten</RouterLink>
+        <RouterLink v-if="user.role !== 'Standard User'" class="sidenavigation_link" to="/all_entries">Alle Einträge</RouterLink>
+        <RouterLink v-if="user.role == 'Controller'" class="sidenavigation_link" to="/users">Mitarbeitende verwalten</RouterLink>
         <a class="sidenavigation_link" href="https://shibboleth-test.tu-berlin.de/idp/profile/Logout">Logout</a>
       </div>
       
     </div>
         <div class="sidenavigation_footer">
-      <RouterLink class="sidenavigation_link sidenavigation_link_support" to="/support">Support</RouterLink>
+      <!--<RouterLink class="sidenavigation_link sidenavigation_link_support" to="/support">Support</RouterLink>-->
       <div class="sidenavigation_userinfo">
-        User1
+        {{ user.name }}
       </div>
     </div>
   </div>

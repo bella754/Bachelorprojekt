@@ -1,9 +1,6 @@
 <script setup>
     import { ref, onMounted } from "vue";
     import Sidenavigation from "./Sidenavigation.vue";
-    import { send_data, get_data } from "../helper";
-
-    import data from '../../../backend/testData/listing.json';
 
     // Referenz für user & Loading-Status
     const user = ref(null);
@@ -11,7 +8,7 @@
 
     async function getUser() {
         try {
-            const response = await fetch('/dashboard', {
+            const response = await fetch('/current-user', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -29,7 +26,30 @@
         }
     }
 
+    async function send_data() {
+        // console.log("in send data function with entries: ", entries.value);
+        try {
+            const response = await fetch(`/api/send-data/${user.value._id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // body: JSON.stringify(entries.value)
+            });
+            
+            const backend_data = await response.json();
+            // console.log("Data received:", backend_data);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    }
+
     onMounted(getUser);
+    // console.log("home view user: ", user);
+    // console.log("home view user.role: ", user.value.role);
+    
+    
+    
 </script>
 
 
@@ -51,22 +71,22 @@
                 <img class="home_item_image" src="@/assets/new_entry.svg" alt="Create new Entry SVG">
                 <h2 class="home_item_header">Neuen Eintrag verfassen</h2>
             </RouterLink>
-            <RouterLink class="home_item" to="/all_entries">
+            <RouterLink v-if="user.role !== 'Standard User'" class="home_item" to="/all_entries">
                 <img class="home_item_image" src="@/assets/all_entries.svg" alt="All Entries SVG">
                 <h2 class="home_item_header">Alle Einträge</h2>
             </RouterLink>
-            <RouterLink class="home_item" to="/users">
+            <RouterLink v-if="user.role == 'Controller'" class="home_item" to="/users">
                 <img class="home_item_image" src="@/assets/user_administration.svg" alt="Edit Users SVG">
                 <h2 class="home_item_header">Mitarbeitende verwalten</h2>
             </RouterLink>
-            <div class="home_item home_item_button" @click="send_data(data)">
+            <div class="home_item home_item_button" @click="send_data(user)">
                 <img class="home_item_image" src="@/assets/send_entries.svg" alt="Send Entries SVG">
-                <h2 class="home_item_header">Einträge absenden</h2>
+                <h2 class="home_item_header">Eigene Einträge absenden</h2>
             </div>
-            <div class="home_item home_item_button" @click="get_data()">
+            <!--<div v-if="user.role == 'Controller'" class="home_item home_item_button" @click="get_data()">
                 <img class="home_item_image" src="@/assets/get_entries.svg" alt="Get Entries SVG">
                 <h2 class="home_item_header">Einträge anfordern</h2>
-            </div>
+            </div>-->
         </div>  
     </div>
 </template>

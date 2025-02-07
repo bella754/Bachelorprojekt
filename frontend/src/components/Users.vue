@@ -9,8 +9,6 @@
             const response = await fetch('/api/all-users');
             const data = await response.json();
             users.value = data.users;
-            // console.log("users in frontend: ", users);
-            // console.log("users.value in frontend: ", users.value);
         } catch (error) {
             console.error('Error fetching users: ', error);
         }
@@ -22,6 +20,7 @@
 <template>
     <Sidenavigation class="sidenavigation"></Sidenavigation>
     <div class="users">
+        <h1 class="users_headline">Nutzer bearbeiten</h1>
         <div class="kanban_board">
             <div v-for="user in users" class="kanban_column">
                 <h3 class="user_name">{{ user.name }}</h3>
@@ -32,6 +31,9 @@
                 </p>
             </div>
         </div>
+        <RouterLink class="link" to="/create-user">
+            Nutzer erstellen
+        </RouterLink>
     </div>
 </template>
 
@@ -66,6 +68,19 @@
         font-weight: bold;
         margin-bottom: 10px;
         color: #c02020;
+    }
+
+    .link {
+        background-color: #c02020;
+        border: 1px solid #c02020;
+        border-radius: 6px;
+        padding: 7px 10px;
+        background-color: #c02020;
+        color: white;
+        margin-top: 10px;
+        position: absolute;
+        right: 0;
+        cursor: pointer;
     }
     
 </style>

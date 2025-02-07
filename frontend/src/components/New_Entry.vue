@@ -13,7 +13,7 @@
 
     async function getUser() {
             try {
-                const response = await fetch('/dashboard', {
+                const response = await fetch('/current-user', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -106,7 +106,5 @@
         color: black;
     }
 
-    .new-entry_headline {
-        color: #c02020;
-    }
+    
 </style>

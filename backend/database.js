@@ -72,21 +72,35 @@ export async function getSingleUserEmail(inputEmail) {
     }
 }
 
-export async function createUser(inputName, inputEmail, inputDepartment) {
+
+
+export async function createUser(inputName, inputEmail, inputDepartment, inputRole) {
     try {
         await client.connect();
 
         const database = client.db('Horus');
         const usersCollection = database.collection('users');
 
-        const user = await usersCollection.insertOne(
-            {
-                "name": inputName,
-                "email": inputEmail,
-                "department": inputDepartment
-            }
-        );
-
+        let user;
+        if (inputRole) {
+            user = await usersCollection.insertOne(
+                {
+                    "name": inputName,
+                    "email": inputEmail,
+                    "department": inputDepartment,
+                    "role": inputRole
+                }
+            );
+        } else {
+            user = await usersCollection.insertOne(
+                {
+                    "name": inputName,
+                    "email": inputEmail,
+                    "department": inputDepartment,
+                    "role": "Standard User"
+                }
+            );
+        }
         // console.log("Created user: ", user);
         return user;
     } finally {
@@ -126,13 +140,12 @@ export async function getActivities() {
 }
 
 /**
- * Update activity. FUNKTIONIERT -- MUSS SPÄTER MIT RICHTIGEN 
- *                  ID's und ObjectId angepasst werden
+ * get activities from one user. FUNKTIONIERT
  * @param {string} inputUserID - ID of the User.
  * um alle aktivitäten von einem user zu bekommen
  */
 export async function getActivitiesFromUser(inputUserID) {
-    console.log("userID in database.js: ", inputUserID);
+    // console.log("userID in database.js: ", inputUserID);
     const userID = ObjectId.createFromHexString(inputUserID);
 
     try {
@@ -142,7 +155,7 @@ export async function getActivitiesFromUser(inputUserID) {
         const activitiesCollection = database.collection('activities');
 
         const activities = await activitiesCollection.find({ userID: userID }).toArray();
-        console.log(`Database: Found activities for user with userID ${inputUserID}: `, activities);
+        // console.log(`Database: Found activities for user with userID ${inputUserID}: `, activities);
         return activities;
     } finally {
         // Ensures that the client will close when you finish/error
@@ -151,8 +164,8 @@ export async function getActivitiesFromUser(inputUserID) {
 }
 
 /**
- * Update activity. FUNKTIONIERT
- * @param {string} inputID - ID of the activity
+ * get single activity
+ * @param {ObjectId} inputID - ID of the activity
  */
 export async function getSingleActivity(inputID) {
     try {
@@ -161,7 +174,7 @@ export async function getSingleActivity(inputID) {
         const database = client.db('Horus');
         const activitiesCollection = database.collection('activities');
 
-        const activity = await activitiesCollection.findOne({ _id: new ObjectId(inputID) })
+        const activity = await activitiesCollection.findOne({ _id: inputID })
 
         // console.log("Found user: ", user);
         return activity;
@@ -172,7 +185,7 @@ export async function getSingleActivity(inputID) {
 }
 
 /**
- * Update activity. FUNKTIONIERT
+ * create activity. FUNKTIONIERT
  * @param {string} activityTitle - Name of the activity.
  * @param {Object} data - The data to update.
  */
@@ -202,7 +215,7 @@ export async function createActivity(activityTitle, inputData, inputUserID) {
 
 /**
  * Update activity.FUNKTIONIERT
- * @param {string} inputID - ID of the activity.
+ * @param {ObjektID} inputID - ID of the activity.
  * @param {Object} updateInputs - Data to update.
  */
 export async function updateActivity(inputID, updateInputs) {
@@ -220,7 +233,7 @@ export async function updateActivity(inputID, updateInputs) {
 
         // Update in der Datenbank durchführen
         const updated_activity = await activitiesCollection.updateOne(
-            { _id: new ObjectId(inputID) },
+            { _id: inputID },
             { $set: updateData } // Aktualisierung des "properties"-Objekts
         );
 
@@ -232,11 +245,9 @@ export async function updateActivity(inputID, updateInputs) {
     }
 }
 
-
-
 /**
  * Delete activity. FUNKTIONIERT
- * @param {string} inputID - ID of the activity
+ * @param {ObjektID} inputID - ID of the activity
  */
 export async function deleteActivity(inputID) {
     try {
@@ -245,7 +256,7 @@ export async function deleteActivity(inputID) {
         const database = client.db('Horus');
         const activitiesCollection = database.collection('activities');
 
-        await activitiesCollection.deleteOne({ _id: new ObjectId(inputID) })
+        await activitiesCollection.deleteOne({ _id: inputID })
 
         // console.log("Found user: ", user);
         return `Activity with ${inputID} deleted`;
@@ -322,11 +333,13 @@ export async function getUsersWithActivities() {
 }
 
 
-
+/**
+ * "send data". FUNKTIONIERT 
+ * @param {ObjektID} inputID 
+ */
 export async function setFinishState(inputID) {
     // console.log("userID in database.js: ", inputID);
     const userID = ObjectId.createFromHexString(inputID);
-
     
     try {
         await client.connect();

@@ -34,6 +34,11 @@ const router = createRouter({
       component: () => import("../components/Users.vue")
     },
     {
+      path: '/create-user',
+      name: 'create_user',
+      component: () => import("../components/Create_User.vue")
+    },
+    {
       path: '/new_entry/lehre-pruefungsleistungen-bachelor-master',
       name: 'new_entry-abschlussarbeit',
       component: () => import("../components/forms/lehre-pruefungsleistungen-bachelor-master.vue")

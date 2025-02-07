@@ -7,6 +7,7 @@ import fs from 'fs';
 import { getAllUsers, createUser, createActivity, updateActivity, getActivities, getSingleActivity, deleteActivity, getActivitiesFromUser, getUsersWithActivities, getSingleUser, getSingleUserEmail, setFinishState } from './database.js';
 import passport from './passportConfig.js';
 import session from 'express-session';
+import ExcelJS from 'exceljs'; 
 import dotenv from 'dotenv';
 dotenv.config();
 // console.log("session secret: ", process.env.SESSION_SECRET);
@@ -112,7 +113,7 @@ schemaFiles.forEach((file) => {
 // get user session -----------------------------------
 //-----------------------------------------------------
 
-app.get('/dashboard', (req, res) => {
+app.get('/current-user', (req, res) => {
     // console.log("req.session.user in server.js: ", req.session.user);
     
     if (req.session.user) {
@@ -126,18 +127,22 @@ app.get('/dashboard', (req, res) => {
 // User CRUD Operations -------------------------------
 //-----------------------------------------------------
 
-/* FUNKTIONIERT */
+/** 
+ * FUNKTIONIERT 
+ * */
 app.get('/api/all-users', async (req, res) => {
     const users = await getAllUsers();
     //console.log("users in server.js: ", users);
     return res.status(200).json({ users })
 });
 
-
+/**
+ * FUNKTINOIERT
+ */
 app.post('/api/new-user', async (req, res) => {
     try {
-        const { name, email, department } = req.body;
-        const new_user = await createUser(name, email, department);
+        const { name, email, department, role } = req.body;
+        const new_user = await createUser(name, email, department, role);
         return res.status(201).json(new_user);
     } catch(error) {
         console.error("Error creating user:", error);
@@ -457,6 +462,54 @@ app.get('/api/users-with-activities', async (req, res) => {
     }
 });
 
+//-----------------------------------------------------------
+// Excel Tabelle erstellen                                 --
+//-----------------------------------------------------------
+app.get('/api/export-excel', async (req, res) => {
+    try {
+        const activities = await getActivities(); // Holt alle Einträge
+
+        if (!activities || activities.length === 0) {
+            return res.status(404).send("Keine Aktivitäten gefunden.");
+        }
+
+        // Erstelle eine neue Excel-Arbeitsmappe
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Aktivitäten");
+
+        // Spalten definieren
+        worksheet.columns = [
+            { header: "ID", key: "_id", width: 25 },
+            { header: "Aktivität", key: "activity", width: 30 },
+            { header: "Erstellt am", key: "createdAt", width: 20 },
+            { header: "User ID", key: "userID", width: 25 },
+            { header: "Status", key: "finished", width: 10 },
+            { header: "Eigenschaften", key: "properties", width: 50 }
+        ];
+
+        // Zeilen hinzufügen
+        activities.forEach(activity => {
+            worksheet.addRow({
+                _id: activity._id,
+                activity: activity.activity,
+                createdAt: activity.createdAt,
+                userID: activity.userID,
+                finished: activity.finished ? "Abgeschlossen" : "Offen",
+                properties: JSON.stringify(activity.properties, null, 2)
+            });
+        });
+
+        // Datei im Speicher erstellen
+        const buffer = await workbook.xlsx.writeBuffer();
+        res.setHeader("Content-Disposition", "attachment; filename=aktivitäten.xlsx");
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.send(buffer);
+
+    } catch (error) {
+        console.error("Fehler beim Exportieren:", error);
+        res.status(500).send("Fehler beim Erstellen der Excel-Datei.");
+    }
+});
 
 
 //-----------------------------------------------------------
@@ -489,5 +542,5 @@ app.get('/api/moses', async (req, res) => {
 
 // Server starten
 app.listen(3000, () => {
-    console.log("Listen on http://localhost:3000");
+    console.log("Listen on http://localhost:3000/login");
 });
