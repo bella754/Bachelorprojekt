@@ -14,7 +14,7 @@ export default defineConfig({
       '@schemas': fileURLToPath(new URL('./backend/schemas', import.meta.url))
     }
   },
-  // build: {
-  //   outDir: 'frontend/dist'
-  // }
+  build: {
+    outDir: './backend/public'
+  }
 })
