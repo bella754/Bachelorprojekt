@@ -3,27 +3,27 @@
   import { ref, onMounted } from "vue";
   
   const user = ref(null);
-    const isLoading = ref(true);
+  const isLoading = ref(true);
 
-    async function getUser() {
-        try {
-            const response = await fetch('/current-user', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+  async function getUser() {
+      try {
+          const response = await fetch('/current-user', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
 
-            const result = await response.json();
-            if (result && result.user) {
-                user.value = result.user; // User-Daten speichern
-            }
-        } catch (error) {
-            console.error("Error getting user data:", error);
-        } finally {
-            isLoading.value = false; // Laden abgeschlossen
-        }
-    }
+          const result = await response.json();
+          if (result && result.user) {
+              user.value = result.user; // User-Daten speichern
+          }
+      } catch (error) {
+          console.error("Error getting user data:", error);
+      } finally {
+          isLoading.value = false; // Laden abgeschlossen
+      }
+  }
 
 
   onMounted(getUser);

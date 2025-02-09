@@ -1,8 +1,10 @@
 import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb';
 import { formatDateTime } from './helper.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
-const uri = "mongodb+srv://admin:admin123@cluster0.jzmel.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.DATABASE_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {

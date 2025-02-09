@@ -6,6 +6,27 @@
     // Reaktive Variable für Nutzer und deren Aktivitäten
     const usersWithActivities = ref([]);
     const expandedUsers = reactive({}); // Zustand für erweiterte Nutzeransichten
+    const user = ref(null);
+
+    async function getUser() {
+        try {
+            const response = await fetch('/current-user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            if (result && result.user) {
+                user.value = result.user; // User-Daten speichern
+            }
+        } catch (error) {
+            console.error("Error getting user data:", error);
+        } finally {
+            isLoading.value = false; // Laden abgeschlossen
+        }
+    }
 
     async function fetchUsersWithActivities() {
         try {
@@ -47,14 +68,19 @@
     }
 
     // Daten beim Laden abrufen
-    onMounted(fetchUsersWithActivities);
+    onMounted(() => {
+        fetchUsersWithActivities();
+        getUser();
+    }) 
+        
+    
+    // onMounted(fetchUsersWithActivities);
 </script>
 
 <template>
     <Sidenavigation></Sidenavigation>
     <div class="all-entries">
         <h1 class="all-entries_headline">Alle Einträge</h1>
-        <button class="button" @click="exportToExcel">Excel Export</button>
         <div class="kanban_board">
             <!-- Kanban-Spalten für jeden Nutzer -->
             <div v-for="user in usersWithActivities" :key="user._id" class="kanban_column">
@@ -78,6 +104,7 @@
                 </button>
             </div>
         </div>
+        <button v-if="user.role == 'Controller'" class="button" @click="exportToExcel">Excel Export</button>
     </div>
 </template>
 
