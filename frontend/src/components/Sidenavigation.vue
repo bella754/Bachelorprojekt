@@ -27,6 +27,9 @@
       }
   }
 
+  async function logout() {
+    window.location.href = "https://horus-290d.onrender.com/logout";
+  }
 
   onMounted(getUser);
     
@@ -43,7 +46,7 @@
         <RouterLink class="sidenavigation_link" to="/new_entry">Neuen Eintrag</RouterLink>
         <RouterLink v-if="user.role !== 'Standard User'" class="sidenavigation_link" to="/all_entries">Alle Einträge</RouterLink>
         <RouterLink v-if="user.role == 'Controller'" class="sidenavigation_link" to="/users">Mitarbeitende verwalten</RouterLink>
-        <a class="sidenavigation_link" href="https://shibboleth-test.tu-berlin.de/idp/profile/Logout">Logout</a>
+        <div class="sidenavigation_link" @click="logout()">Logout</div>
       </div>
       
     </div>

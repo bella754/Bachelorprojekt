@@ -69,6 +69,28 @@ app.post('/login/callback', passport.authenticate('saml', { failureRedirect: '/'
   }
 );
 
+app.get('/logout', (req, res) => {
+    req.logout((err) => { // Löscht die Passport-Session
+        if (err) {
+            console.error("Logout-Fehler:", err);
+            return res.status(500).send("Logout-Fehler");
+        }
+        
+        req.session.destroy((err) => { // Zerstört die Express-Session
+            if (err) {
+                console.error("Session konnte nicht gelöscht werden:", err);
+                return res.status(500).send("Fehler beim Löschen der Session");
+            }
+            
+            res.clearCookie('connect.sid'); // Session-Cookie löschen (wichtig!)
+            
+            // Weiterleitung zum IDP-Logout
+            res.redirect('https://shibboleth-test.tu-berlin.de/idp/profile/Logout');
+        });
+    });
+});
+
+
 //----------------------------------------------------
 // Schema Validation ---------------------------------
 //----------------------------------------------------
