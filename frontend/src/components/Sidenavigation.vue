@@ -28,6 +28,7 @@
   }
 
   async function logout() {
+    console.log("in frontend logout function");
     window.location.href = "https://horus-290d.onrender.com/logout";
   }
 

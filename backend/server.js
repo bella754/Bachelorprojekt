@@ -70,6 +70,8 @@ app.post('/login/callback', passport.authenticate('saml', { failureRedirect: '/'
 );
 
 app.get('/logout', (req, res) => {
+    console.log("in backend logout function");
+    
     req.logout((err) => { // Löscht die Passport-Session
         if (err) {
             console.error("Logout-Fehler:", err);
@@ -83,6 +85,7 @@ app.get('/logout', (req, res) => {
             }
             
             res.clearCookie('connect.sid'); // Session-Cookie löschen (wichtig!)
+            console.log("req.session destroyed: ", req.session);
             
             // Weiterleitung zum IDP-Logout
             res.redirect('https://shibboleth-test.tu-berlin.de/idp/profile/Logout');
