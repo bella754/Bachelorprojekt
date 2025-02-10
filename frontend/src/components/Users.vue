@@ -3,10 +3,11 @@
     import Sidenavigation from "./Sidenavigation.vue";
 
     const users = ref([])
+    const API_URL = import.meta.env.VITE_API_URL;
 
     async function fetchUsers() {
         try {
-            const response = await fetch('/api/all-users');
+            const response = await fetch(`${API_URL}/api/all-users`);
             const data = await response.json();
             users.value = data.users;
         } catch (error) {

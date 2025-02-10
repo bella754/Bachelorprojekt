@@ -12,6 +12,9 @@ const role = ref("Standard User");
 const successMessage = ref("");
 const errorMessage = ref("");
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 // Funktion zum Erstellen eines neuen Nutzers
 async function createUser() {
     // Überprüfen, ob alle Felder ausgefüllt sind
@@ -22,7 +25,7 @@ async function createUser() {
     }
 
     try {
-        const response = await fetch('/api/new-user', {
+        const response = await fetch(`${API_URL}/api/new-user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

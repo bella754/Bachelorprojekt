@@ -5,10 +5,12 @@
     // Referenz für user & Loading-Status
     const user = ref(null);
     const isLoading = ref(true);
+    const API_URL = import.meta.env.VITE_API_URL;
+    // console.log("api_url aus .env: ", API_URL);
 
     async function getUser() {
-        try {
-            const response = await fetch('/current-user', {
+        try {            
+            const response = await fetch(`${API_URL}/current-user`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -29,7 +31,7 @@
     async function send_data() {
         // console.log("in send data function with entries: ", entries.value);
         try {
-            const response = await fetch(`/api/send-data/${user.value._id}`, {
+            const response = await fetch(`${API_URL}/api/send-data/${user.value._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

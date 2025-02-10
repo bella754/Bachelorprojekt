@@ -7,10 +7,11 @@
     const usersWithActivities = ref([]);
     const expandedUsers = reactive({}); // Zustand für erweiterte Nutzeransichten
     const user = ref(null);
+    const API_URL = import.meta.env.VITE_API_URL;
 
     async function getUser() {
         try {
-            const response = await fetch('/current-user', {
+            const response = await fetch(`${API_URL}/current-user`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,7 +31,7 @@
 
     async function fetchUsersWithActivities() {
         try {
-            const response = await fetch('/api/users-with-activities');
+            const response = await fetch(`${API_URL}/api/users-with-activities`);
             usersWithActivities.value = await response.json();
             // Initialisiere expandedUsers für jeden Benutzer auf false
             usersWithActivities.value.forEach(user => {
@@ -54,7 +55,7 @@
     // Funktion für den Excel-Export
     async function exportToExcel() {
         try {
-            const response = await fetch('/api/export-excel');
+            const response = await fetch(`${API_URL}/api/export-excel`);
             if (!response.ok) throw new Error("Fehler beim Herunterladen der Datei");
 
             const blob = await response.blob();

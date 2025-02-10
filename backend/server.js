@@ -541,6 +541,7 @@ app.get('/api/moses', async (req, res) => {
 
 
 // Server starten
-app.listen(3000, () => {
-    console.log("Listen on http://localhost:3000/login");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server läuft auf Port ${PORT}`);
 });

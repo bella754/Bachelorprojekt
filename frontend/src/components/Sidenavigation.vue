@@ -5,9 +5,11 @@
   const user = ref(null);
   const isLoading = ref(true);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   async function getUser() {
       try {
-          const response = await fetch('/current-user', {
+          const response = await fetch(`${API_URL}/current-user`, {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json'

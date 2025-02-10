@@ -5,10 +5,11 @@
 
     const route = useRoute();
     const activity = ref(null);
+    const API_URL = import.meta.env.VITE_API_URL;
 
     async function fetchActivity(activityId) {
         try {
-            const response = await fetch(`/api/activity/${activityId}`);
+            const response = await fetch(`${API_URL}/api/activity/${activityId}`);
             activity.value = await response.json();
         } catch (error) {
             console.error("Error fetching activity:", error);

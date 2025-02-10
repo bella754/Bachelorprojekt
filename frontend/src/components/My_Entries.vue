@@ -5,10 +5,13 @@
     const entries = ref([]);
     const user = ref(null);
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
+
     async function send_data() {
         // console.log("in send data function with entries: ", entries.value);
         try {
-            const response = await fetch(`/api/send-data/${user.value._id}`, {
+            const response = await fetch(`${API_URL}/api/send-data/${user.value._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -25,7 +28,7 @@
 
     async function getUser() {
         try {
-            const response = await fetch('/current-user', {
+            const response = await fetch(`${API_URL}/current-user`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -50,7 +53,7 @@
           // console.log("userID in my_entries: ", userID);
 
           try {
-            const response = await fetch(`/api/user-all-activities/${userID}`, {
+            const response = await fetch(`${API_URL}/api/user-all-activities/${userID}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

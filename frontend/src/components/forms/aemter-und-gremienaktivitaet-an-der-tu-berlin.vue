@@ -13,6 +13,8 @@
     const schemaProperties = schema.properties;
 
     const requiredFields = schema.required || [];
+    const API_URL = import.meta.env.VITE_API_URL;
+
 
     // Initialize formData based on schema
     Object.keys(schemaProperties).forEach(key => {
@@ -27,7 +29,7 @@
         try {
             //console.log("right before fetch userid: ", userID);
             //console.log("right before fetch userid.value: ", userID.value);
-            const response = await fetch(`/api/new-activity/aemter-und-gremienaktivitaet-an-der-tu-berlin/${userID.value}`, {
+            const response = await fetch(`${API_URL}/api/new-activity/aemter-und-gremienaktivitaet-an-der-tu-berlin/${userID.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

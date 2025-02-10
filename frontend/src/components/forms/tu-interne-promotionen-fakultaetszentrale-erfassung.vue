@@ -10,6 +10,8 @@
     const schemaProperties = schema.properties;
 
     const requiredFields = schema.required || [];
+    const API_URL = import.meta.env.VITE_API_URL;
+
 
     // Initialize formData based on schema
     Object.keys(schemaProperties).forEach(key => {
@@ -21,7 +23,7 @@
         console.log("formData in frontend: ", formData.value);
         
         try {
-            const response = await fetch(`/api/new-activity/tu-interne-promotionen-fakultaetszentrale-erfassung/${userID.value}`, {
+            const response = await fetch(`${API_URL}/api/new-activity/tu-interne-promotionen-fakultaetszentrale-erfassung/${userID.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -14,7 +14,7 @@ const metadata = readFileSync('/etc/secrets/shibboleth-test.tu-berlin.de_metadat
 let idpCertFromMetadata = idpCertificate;
 
 let samlOptions = {
-    callbackUrl: 'http://localhost:3000/login/callback',
+    callbackUrl: 'https://horus-290d.onrender.com/login/callback',
     // issuer: 'https://shibboleth-test.tu-berlin.de/idp/shibboleth',
     // idpCert: idpCertificate,
     issuer: "Horus",
@@ -79,7 +79,7 @@ const samlStrategy = new Strategy(samlOptions, (profile, done) => {
 
 const clientMetadata = generateServiceProviderMetadata({
   issuer: "Horus",
-  callbackUrl: "https://example.com/callback",
+  callbackUrl: "https://horus-290d.onrender.com",
 });
 
 // console.log("metadata generated: ", testMetadata);
