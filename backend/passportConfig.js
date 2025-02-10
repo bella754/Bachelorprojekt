@@ -6,10 +6,10 @@ import { parseString } from 'xml2js';
 import {generateServiceProviderMetadata} from "@node-saml/node-saml";
 
 // Pfad zur Zertifikatdatei
-const idpCertificate = fs.readFileSync('./certs/shibboleth-test_tu-berlin_de_cert.pem', 'utf-8');
+const idpCertificate = fs.readFileSync('/etc/secrets/shibboleth-test_tu-berlin_de_cert.pem', 'utf-8');
 
 // Metadaten-Datei lesen
-const metadata = readFileSync('./metadata/shibboleth-test.tu-berlin.de_metadata.xml', 'utf-8');
+const metadata = readFileSync('/etc/secrets/shibboleth-test.tu-berlin.de_metadata.xml', 'utf-8');
 
 let idpCertFromMetadata = idpCertificate;
 
