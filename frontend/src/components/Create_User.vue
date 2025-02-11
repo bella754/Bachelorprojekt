@@ -83,7 +83,7 @@ async function createUser() {
                 <option value="Reviewer">Reviewer</option>
             </select>
 
-            <button class="button" @click="createUser">
+            <button class="button" @click="createUser()">
                 Nutzer erstellen
             </button>
 
@@ -138,8 +138,10 @@ input, select {
     font-size: 16px;
 }
 
-.button:hover {
-    background-color: #a01a1a;
+.button:hover,
+.button:active {
+    cursor: pointer;
+    background-color: #9e1919;
 }
 
 .success {

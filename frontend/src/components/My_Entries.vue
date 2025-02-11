@@ -128,7 +128,12 @@
         margin-top: 10px;
         position: absolute;
         right: 0;
+    }
+
+    .button:hover,
+    .button:active {
         cursor: pointer;
+        background-color: #9e1919;
     }
 
     .button_filter {

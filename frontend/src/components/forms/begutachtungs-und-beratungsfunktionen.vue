@@ -118,6 +118,12 @@
         margin-top: 10px;
     }
 
+    .form_submit:hover,
+    .form_submit:active {
+        cursor: pointer;
+        background-color: #9e1919;
+    }
+
     .form_input::-webkit-outer-spin-button,
     .form_input::-webkit-inner-spin-button {
         -webkit-appearance: none;

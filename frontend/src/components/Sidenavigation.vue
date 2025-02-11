@@ -96,6 +96,7 @@
 
   .sidenavigation_link:hover {
     text-decoration: underline;
+    cursor: pointer;
   }
 
   .sidenavigation_userinfo {
