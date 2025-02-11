@@ -12,6 +12,7 @@
 
     const requiredFields = schema.required || [];
     const API_URL = import.meta.env.VITE_API_URL;
+    const fieldErrors = ref({}); // Speichert Fehler für jedes Feld
 
 
     // Initialize formData based on schema
