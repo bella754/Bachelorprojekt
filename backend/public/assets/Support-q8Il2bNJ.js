@@ -1,0 +1,1 @@
+import{_ as e,S as s}from"./Sidenavigation-C2VktLE-.js";import{c as t,a as o,b as r,F as n,g as p}from"./index-0-m_6IU_.js";const c={__name:"Support",setup(_){return(d,a)=>(p(),t(n,null,[o(s,{class:"sidenavigation"}),a[0]||(a[0]=r("div",{class:"support"},null,-1))],64))}},u=e(c,[["__scopeId","data-v-1db4d673"]]);export{u as default};

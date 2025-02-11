@@ -21,6 +21,7 @@
             
             const backend_data = await response.json();
             // console.log("Data received:", backend_data);
+            alert("Daten wurden gesendet")
         } catch (error) {
             console.error("Error submitting form:", error);
         }
