@@ -18,10 +18,45 @@
         formData.value[key] = '';         
     });
 
+    function validateForm() {
+        let isValid = true;
+        fieldErrors.value = {}; // Reset errors
+
+        requiredFields.forEach(key => {
+            const value = formData.value[key];
+
+            // Prüfen, ob das Feld leer ist
+            if (!value || value === "") {
+                fieldErrors.value[key] = "Dieses Feld darf nicht leer sein.";
+                isValid = false;
+            }
+
+            // Prüfen, ob eine Zahl erwartet wird und ob sie korrekt ist
+            if (schemaProperties[key].type === "integer") {
+                if (!Number.isInteger(Number(value))) {
+                    fieldErrors.value[key] = "Bitte nur ganze Zahlen eingeben.";
+                    isValid = false;
+                }
+            }
+
+            if (schemaProperties[key].type === "number") {
+                if (isNaN(value)) {
+                    fieldErrors.value[key] = "Bitte eine gültige Zahl eingeben.";
+                    isValid = false;
+                }
+            }
+        });
+
+        return isValid;
+    }
+
     // handle form submission
     async function submit_form() {
-        console.log("formData in frontend: ", formData.value);
-        
+        if (!validateForm()) {
+            alert("Bitte alle Fehler beheben, bevor du das Formular absendest.");
+            return;
+        }        
+
         try {
             const response = await fetch(`${API_URL}/api/new-activity/tu-interne-promotionen-fakultaetszentrale-erfassung/${userID.value}`, {
                 method: 'POST',
@@ -33,6 +68,7 @@
             
             const data = await response.json();
             // console.log("Data received from backend:", data);
+            alert("Formular erfolgreich gesendet!");
         } catch (error) {
             console.error("Error submitting form:", error);
         }
