@@ -13,7 +13,7 @@ const schemaProperties = ref({});
 const requiredFields = ref([]);
 const fieldErrors = ref({});
 const API_URL = import.meta.env.VITE_API_URL;
-const schemaModules = import.meta.glob('@schemas/new/*.json');
+const schemaModules = import.meta.glob('@schemas/*.json');
 
 onMounted(async () => {
     for (const path in schemaModules) {

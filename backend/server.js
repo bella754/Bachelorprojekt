@@ -96,7 +96,7 @@ app.get('/logout', (req, res) => {
 //----------------------------------------------------
 const ajv = new Ajv(); // Ajv-Instanz erstellen -> zum Schema validieren
 
-const schemaDir = './schemas/new/';
+const schemaDir = './schemas/';
 const schemaFiles = fs.readdirSync(schemaDir);
 const validators = {};
 
