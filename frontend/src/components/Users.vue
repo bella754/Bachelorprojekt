@@ -29,6 +29,8 @@
                     {{ user.email }}
                     <br>
                     {{ user.department }}
+                    <br>
+                    {{ user.department }}
                 </p>
             </div>
         </div>

@@ -4,7 +4,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
 import fs from 'fs';
-import { getAllUsers, createUser, createActivity, updateActivity, getActivities, getSingleActivity, deleteActivity, getActivitiesFromUser, getUsersWithActivities, getSingleUser, getSingleUserEmail, setFinishState } from './database.js';
+import { getAllUsers, createUser, createActivity, updateActivity, getActivities, getSingleActivity, deleteActivity, getActivitiesFromUser, getUsersWithActivities, getSingleUser, getSingleUserEmail, setFinishState, deleteUser } from './database.js';
 import passport from './passportConfig.js';
 import session from 'express-session';
 import ExcelJS from 'exceljs'; 
@@ -36,16 +36,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//-------------------------------------------------------------- 
-// Login-Route -------------------------------------------------
-//--------------------------------------------------------------
+//-----------------------------------------------
+// Login-Route ----------------------------------
+//-----------------------------------------------
 app.get('/login', passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }));
 
-//--------------------------------------------------------------
-// SAML-Callback-Route  FUNKTIONIERT ---------------------------
-//--------------------------------------------------------------
+//------------------------------------------------
+// SAML-Callback-Route ---------------------------
+//------------------------------------------------
 app.post('/login/callback', passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }), async (req, res) => {
-    // console.log("in app.post login callback");
     
     let profile = req.user;
 
@@ -53,38 +52,36 @@ app.post('/login/callback', passport.authenticate('saml', { failureRedirect: '/'
         return res.status(400).send("Login failed: no profile provided");
     }
     
-    // let email = "benser@campus.tu-berlin.de";
     let email = profile.email;
 
     let user = await getSingleUserEmail(email);
 
     if(user) {
-        // console.log("user with email found: ", user);
-        req.session.user = user; // neu hinzugefügt, mal sehen, ob es funktioniert
+        req.session.user = user; 
         res.redirect('/');
-        // res.status(200).send("user with email found");
     } else {
         res.status(404).send("no user found");
     }
   }
 );
 
-app.get('/logout', (req, res) => {
-    console.log("in backend logout function");
-    
-    req.logout((err) => { // Löscht die Passport-Session
+//-----------------------------------------------
+// Logout-Route ---------------------------------
+//-----------------------------------------------
+app.get('/logout', (req, res) => {    
+    req.logout((err) => { 
         if (err) {
             console.error("Logout-Fehler:", err);
             return res.status(500).send("Logout-Fehler");
         }
         
-        req.session.destroy((err) => { // Zerstört die Express-Session
+        req.session.destroy((err) => { 
             if (err) {
                 console.error("Session konnte nicht gelöscht werden:", err);
                 return res.status(500).send("Fehler beim Löschen der Session");
             }
             
-            res.clearCookie('connect.sid'); // Session-Cookie löschen (wichtig!)
+            res.clearCookie('connect.sid');
             console.log("req.session destroyed: ", req.session);
             
             // Weiterleitung zum IDP-Logout
@@ -138,7 +135,7 @@ schemaFiles.forEach((file) => {
 // get user session -----------------------------------
 //-----------------------------------------------------
 
-app.get('/current-user', (req, res) => {
+app.get('/api/current-user', (req, res) => {
     // console.log("req.session.user in server.js: ", req.session.user);
     
     if (req.session.user) {
@@ -154,11 +151,28 @@ app.get('/current-user', (req, res) => {
 
 /** 
  * FUNKTIONIERT 
- * */
+ */
 app.get('/api/all-users', async (req, res) => {
-    const users = await getAllUsers();
-    //console.log("users in server.js: ", users);
-    return res.status(200).json({ users })
+    try {
+        const users = await getAllUsers();
+        return res.status(200).json({ users });
+    } catch (error) {
+        console.error("Error getting users:", error);
+        res.status(500).json({ error: 'Error getting users' });
+    }
+});
+
+/** 
+ * FUNKTIONIERT 
+ */
+app.get('/api/get-user/:userID', async (req, res) => {
+    try{
+        const user = await getSingleUser(req.params.userID);
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Error getting user:", error);
+        res.status(404).send("No user found");
+    }
 });
 
 /**
@@ -173,7 +187,28 @@ app.post('/api/new-user', async (req, res) => {
         console.error("Error creating user:", error);
         res.status(500).json({ error: 'Error creating user' });
     }
-})
+});
+
+app.put('/api/update-user', async (req, res) => {
+    try {
+        const { userID, ...updateFields } = req.body; 
+        const updatedUser = await updateUser(userID, updateFields);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(403).send("Can't update user");
+    }
+});
+
+app.delete('/api/delete-user', async (req, res) => {
+    try {
+        const deleteMessage = await deleteUser(req.params.userID);
+        res.status(200).json(deleteMessage);
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(403).send("Can't delete user");
+    }
+});
 
 //-----------------------------------------------------
 // Activity CRUD Operations ---------------------------
@@ -181,258 +216,70 @@ app.post('/api/new-user', async (req, res) => {
 
 /* FUNKTIONIERT */
 app.get('/api/all-activities', async (req, res) => {
-    const activities = await getActivities();
-    // console.log("activities in backend: ", activities);
-
-    res.status(200).json(activities);
+    try {
+        const activities = await getActivities();    
+        res.status(200).json(activities);
+    } catch (error) {
+        console.error("Error getting all activities:", error);
+        res.status(403).send("Can't get all activities");
+    }
 })
 
 /* FUNKTIONIERT */
 app.get('/api/user-all-activities/:userID', async (req, res) => {
-    const userID = req.params.userID;
-    //console.log("userID in backend: ", userID);
-    const activities = await getActivitiesFromUser(userID);
-    //console.log("activities from database in backend: ", activities);
+    try {
+        const userID = req.params.userID;
+        const activities = await getActivitiesFromUser(userID);
+        res.status(200).json(activities)
+    } catch(error) {
+        console.error("Error getting all activities from user:", error);
+        res.status(403).send("Can't get all activities from user");
+    }
+        
     
-    res.status(200).json(activities)
-})
+});
 
 /* FUNKTIONIERT */
 app.get('/api/activity/:id', async (req, res) => {
-    // let id = "674998eb9a611260366ec86d";
-    // console.log("id: ",req.params.id, typeof(req.params.id));
-    const activity = await getSingleActivity(req.params.id);
-
-    res.status(200).json(activity);
-})
+    try {
+        const activity = await getSingleActivity(req.params.id);
+        res.status(200).json(activity);
+    } catch (error) {
+        console.error("Error getting all activity:", error);
+        res.status(403).send("Can't get all activity");
+    } 
+});
 
 /**
 * FUNKTIONIERT
 * @TODO : ausstellungen und orga mit bool werten müssen noch geändert 
 *         dann zum laufen gebracht werdens
 */
-app.post('/api/new-activity/:type/:userID', async (req, res) => {   
-    // Validierung der Eingabedaten
-    // console.log("in backend with req.body and params: ", req.body, req.params);
-    const type = req.params.type;
+app.post('/api/new-activity/:userID', async (req, res) => {   
     const userID = req.params.userID;
-    // console.log("user id in server.js: ", userID);
-    // console.log("type: ", type);
+    const { activityTitle, ...activityData } = req.body;
 
-    if (type == "aemter-und-gremienaktivitaet-an-der-tu-berlin") {
-        // console.log("in type == ämter und aktivitäten");
-        
-        const validate = validators[type]
-        const isValid = validate(req.body);
+    if (!schemaTitle) {
+        return res.status(400).json({ error: "Kein schemaTitle im Request-Body angegeben." });
+    }
 
-        if (!isValid) {
-            // console.log("req ist not valid in backend");
-            return res.status(400).json({ errors: isValid.errors });
-        }
+    const validate = validators[activityTitle];
+    if (!validate) {
+        return res.status(400).json({ error: "Ungültiger schemaTitle oder Schema nicht gefunden." });
+    }
 
-        try {
-            // console.log("req.body is valid");
-            
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Aemter und Gremienaktivität", req.body, userID);
-            console.log("new activity created: ", newActivity);
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    } else if (type == "ausstellungen-und-messen") {
-        
-        const validate = validators[type]
-        const isValid = validate(req.body);
+    const isValid = validate(activityData);
+    if (!isValid.valid) {
+        return res.status(400).json({ errors: isValid.errors });
+    }
 
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {            
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Ausstellungen und Messen", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    } else if (type == "begutachtungs-und-beratungsfunktionen") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Begutachtungs und Beratungsfunktionen", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    } else if (type == "einrichtung-eines-internationalen-studiengangs") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Einrichtung eines internationalen Studiengangs", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "elektronische-veroeffentlichungen") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, aktivität weiterverarbeiten
-            const newActivity = await createActivity("Elektronische Veröffentlichungen", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "lehre-pruefungsleistungen-bachelor-master") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Lehre - Prüfungsleistungen Bachelor", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "organisation-ausrichtung-von-tagungen-konferenzen") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Organisation/Ausrichtung von Tagungen/Konferenzen", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "publikationen-in-sammelbaenden") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Publikationen in Sammelbänden", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "publikationen-in-wissenschaftlichen-fachzeitschriften") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Publikationen in wissenschaftlichen Fachzeitschriften", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "tu-interne-promotionen-fakultaetszentrale-erfassung") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("TU-interne Promotionen (fakultätszentrale Erfassung)", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    }  else if (type == "vortrag-auf-tagungen-konferenzen") {
-
-        const validate = validators[type]
-        const isValid = validate(req.body);
-
-        if (!isValid) {
-            return res.status(400).json({ errors: isValid.errors });
-        }
-
-        try {
-            // Wenn die Validierung erfolgreich war, Thesis weiterverarbeiten oder in die DB speichern
-            const newActivity = await createActivity("Vortrag auf Tagungen/Konferenzen", req.body, userID);
-            console.log("new activity created: ", newActivity);
-
-            res.status(200).json(newActivity);
-        } catch (error) {
-            console.error("Error creating activity:", error);
-            res.status(500).json({ error: 'Error creating activity' });
-        }
-    } else {
-        res.status(404).json("No activity found")
+    try {
+        const newActivity = await createActivity(activityTitle, activityData, userID);
+        console.log("New activity created:", newActivity);
+        res.status(200).json(newActivity);
+    } catch (error) {
+        console.error("Error creating activity:", error);
+        res.status(500).json({ error: 'Error creating activity' });
     }
 });
 
@@ -460,19 +307,26 @@ app.post('/api/send-data/:userID', async (req, res) => {
 * mit body { "activityID": "677eab863a2c3c5edbd6bb4b", "properties": {"Vorname": "neuer eintrag"}}
 */
 app.put('/api/update-activity', async (req, res) => {
-    // console.log("in update activity backend");
-    const { activityID, properties } = req.body;    
-
-    const updated_activity = await updateActivity(activityID, properties);
-    res.status(200).json(updated_activity);
-})
+    try {
+        const { activityID, properties } = req.body;    
+        const updated_activity = await updateActivity(activityID, properties);
+        res.status(200).json(updated_activity);
+    } catch (error) {
+        console.error("Error updating activity:", error);
+        res.status(500).json({ error: 'Error updating activity' });
+    }
+});
 
 /* FUNKTIONIERT */
 app.delete('/api/delete-activity/:id', async (req, res) => {
-    const deleteMessage = await deleteActivity(req.params.id);
-
-    res.status(200).json(deleteMessage);
-})
+    try {
+        const deleteMessage = await deleteActivity(req.params.id);
+        res.status(200).json(deleteMessage);
+    } catch (error) {
+        console.error("Error deleting activity:", error);
+        res.status(500).json({ error: 'Error deleting activity' });
+    }
+});
 
 /** 
 * FUNKTIONIERT 
@@ -492,41 +346,39 @@ app.get('/api/users-with-activities', async (req, res) => {
 //-----------------------------------------------------------
 app.get('/api/export-excel', async (req, res) => {
     try {
-        const activities = await getActivities(); // Holt alle Einträge
+        const usersWithActivities = await getUsersWithActivities(); // Holt nur Nutzer mit `finished: true` Aktivitäten
 
-        if (!activities || activities.length === 0) {
-            return res.status(404).send("Keine Aktivitäten gefunden.");
+        if (!usersWithActivities || usersWithActivities.length === 0) {
+            return res.status(404).send("Keine abgeschlossenen Aktivitäten gefunden.");
         }
 
         // Erstelle eine neue Excel-Arbeitsmappe
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Aktivitäten");
+        const worksheet = workbook.addWorksheet("Abgeschlossene Aktivitäten");
 
         // Spalten definieren
         worksheet.columns = [
-            { header: "ID", key: "_id", width: 25 },
+            { header: "Name", key: "name", width: 30 },
             { header: "Aktivität", key: "activity", width: 30 },
             { header: "Erstellt am", key: "createdAt", width: 20 },
-            { header: "User ID", key: "userID", width: 25 },
-            { header: "Status", key: "finished", width: 10 },
             { header: "Eigenschaften", key: "properties", width: 50 }
         ];
 
-        // Zeilen hinzufügen
-        activities.forEach(activity => {
-            worksheet.addRow({
-                _id: activity._id,
-                activity: activity.activity,
-                createdAt: activity.createdAt,
-                userID: activity.userID,
-                finished: activity.finished ? "Abgeschlossen" : "Offen",
-                properties: JSON.stringify(activity.properties, null, 2)
+        // Zeilen mit Daten befüllen
+        usersWithActivities.forEach(user => {
+            user.activities.forEach(activity => {
+                worksheet.addRow({
+                    name: user.name,
+                    activity: activity.activity,
+                    createdAt: activity.createdAt,
+                    properties: JSON.stringify(activity.properties, null, 2)
+                });
             });
         });
 
         // Datei im Speicher erstellen
         const buffer = await workbook.xlsx.writeBuffer();
-        res.setHeader("Content-Disposition", "attachment; filename=aktivitäten.xlsx");
+        res.setHeader("Content-Disposition", "attachment; filename=abgeschlossene_aktivitäten.xlsx");
         res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         res.send(buffer);
 

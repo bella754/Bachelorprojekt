@@ -10,7 +10,7 @@
 
     async function getUser() {
         try {            
-            const response = await fetch(`${API_URL}/current-user`, {
+            const response = await fetch(`${API_URL}/api/current-user`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,11 +47,6 @@
     }
 
     onMounted(getUser);
-    // console.log("home view user: ", user);
-    // console.log("home view user.role: ", user.value.role);
-    
-    
-    
 </script>
 
 

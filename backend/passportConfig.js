@@ -1,12 +1,11 @@
 import { readFileSync } from 'fs';
-import fs from 'fs';
 import passport from 'passport';
 import { Strategy } from '@node-saml/passport-saml';
 import { parseString } from 'xml2js';
 import {generateServiceProviderMetadata} from "@node-saml/node-saml";
 
 // Pfad zur Zertifikatdatei
-const idpCertificate = fs.readFileSync('/etc/secrets/shibboleth-test_tu-berlin_de_cert.pem', 'utf-8');
+const idpCertificate = readFileSync('/etc/secrets/shibboleth-test_tu-berlin_de_cert.pem', 'utf-8');
 
 // Metadaten-Datei lesen
 const metadata = readFileSync('/etc/secrets/shibboleth-test.tu-berlin.de_metadata.xml', 'utf-8');
@@ -15,8 +14,6 @@ let idpCertFromMetadata = idpCertificate;
 
 let samlOptions = {
     callbackUrl: 'https://horus-290d.onrender.com/login/callback',
-    // issuer: 'https://shibboleth-test.tu-berlin.de/idp/shibboleth',
-    // idpCert: idpCertificate,
     issuer: "Horus",
     entryPoint: 'https://shibboleth-test.tu-berlin.de/idp/profile/SAML2/Redirect/SSO', // EntryPoint
 };
