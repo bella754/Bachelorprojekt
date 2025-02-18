@@ -98,6 +98,8 @@ const ajv = new Ajv(); // Ajv-Instanz erstellen -> zum Schema validieren
 
 const schemaDir = './schemas/';
 const schemaFiles = fs.readdirSync(schemaDir);
+console.log("schemaFiles in validation: ", schemaFiles);
+
 const validators = {};
 
 schemaFiles.forEach((file) => {
@@ -264,6 +266,12 @@ app.post('/api/new-activity/:userID', async (req, res) => {
     }
 
     const validate = validators[activityTitle];
+    console.log("activityTitle: ", activityTitle);
+    console.log("validators: ", validators);
+    console.log("validators[activityTitle]: ", validate);
+    
+    
+    
     if (!validate) {
         return res.status(400).json({ error: "Ungültiger schemaTitle oder Schema nicht gefunden." });
     }
