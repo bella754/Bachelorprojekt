@@ -24,8 +24,6 @@
             }
         } catch (error) {
             console.error("Error getting user data:", error);
-        } finally {
-            isLoading.value = false; // Laden abgeschlossen
         }
     }
 
@@ -105,6 +103,10 @@
                 </button>
             </div>
         </div>
+        {{ user }}
+        {{ user.value }}
+        {{ user.role }}
+        
         <button v-if="user.role == 'Controller'" class="button" @click="exportToExcel">Excel Export</button>
     </div>
 </template>
