@@ -98,16 +98,20 @@ const ajv = new Ajv(); // Ajv-Instanz erstellen -> zum Schema validieren
 
 const schemaDir = './schemas/';
 const schemaFiles = fs.readdirSync(schemaDir);
-console.log("schemaFiles in validation: ", schemaFiles);
-
 const validators = {};
 
 schemaFiles.forEach((file) => {
-    const schemaName = file.replace('.json', '');
-    const schemaPath = path.join(schemaDir, file); 
-    const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8')); 
-    
-    validators[schemaName] = (data) => {
+    const schemaPath = path.join(schemaDir, file);
+    const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+
+    if (!schema.title) {
+        console.error(`Schema ${file} hat keinen Titel.`);
+        return;
+    }
+
+    const schemaTitle = schema.title; // Verwende den Titel als Schlüssel für die Validierung
+
+    validators[schemaTitle] = (data) => {
         // Prüfe, ob alle `required`-Felder existieren und nicht leer sind
         if (schema.required) {
             for (const field of schema.required) {
@@ -129,9 +133,9 @@ schemaFiles.forEach((file) => {
             errors: isValid ? [] : validate.errors.map(err => `${err.instancePath} ${err.message}`)
         };
     };
-    
-    // validators[schemaName] = ajv.compile(schema); 
 });
+
+
 
 //-----------------------------------------------------
 // get user session -----------------------------------
