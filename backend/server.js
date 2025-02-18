@@ -200,7 +200,7 @@ app.put('/api/update-user', async (req, res) => {
     }
 });
 
-app.delete('/api/delete-user', async (req, res) => {
+app.delete('/api/delete-user/:userID', async (req, res) => {
     try {
         const deleteMessage = await deleteUser(req.params.userID);
         res.status(200).json(deleteMessage);
@@ -259,7 +259,7 @@ app.post('/api/new-activity/:userID', async (req, res) => {
     const userID = req.params.userID;
     const { activityTitle, ...activityData } = req.body;
 
-    if (!schemaTitle) {
+    if (!activityTitle) {
         return res.status(400).json({ error: "Kein schemaTitle im Request-Body angegeben." });
     }
 
