@@ -4,7 +4,7 @@ import Sidenavigation from "./Sidenavigation.vue";
 import { useRouter } from "vue-router";
 
 const forms = ref([]);
-const schemaModules = import.meta.glob('@schemas/new/*.json');
+const schemaModules = import.meta.glob('@schemas/*.json');
 const user = ref(null);
 const API_URL = import.meta.env.VITE_API_URL;
 const router = useRouter();
