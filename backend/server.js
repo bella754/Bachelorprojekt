@@ -322,7 +322,7 @@ app.post('/api/send-data/:userID', async (req, res) => {
 */
 app.put('/api/update-activity', async (req, res) => {
     try {
-        const { userID, ...updateFields } = req.body; 
+        const { activityID, ...updateFields } = req.body; 
         const updated_activity = await updateActivity(activityID, updateFields);
         res.status(200).json(updated_activity);
     } catch (error) {
