@@ -122,6 +122,9 @@ export async function createUser(inputName, inputEmail, inputDepartment, inputRo
 */
 export async function updateUser(inputID, updateFields) {    
     const userID = ObjectId.createFromHexString(inputID);
+    console.log("inputid und updatefields in database.js: ", inputID, updateFields);
+    console.log("userID after transform: ", userID);
+    
 
     try {
         await client.connect();
@@ -134,6 +137,8 @@ export async function updateUser(inputID, updateFields) {
             { $set: updateFields } 
         );
 
+        console.log("updatedUser: ", updatedUser);
+        
         return updatedUser;
     } catch (error) {
         console.error("Error in updateUser:", error);

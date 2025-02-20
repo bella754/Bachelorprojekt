@@ -198,6 +198,8 @@ app.post('/api/new-user', async (req, res) => {
 app.put('/api/update-user', async (req, res) => {
     try {
         const { userID, ...updateFields } = req.body; 
+        console.log("userid und updateFields: ", userID, updateFields);
+        
         const updatedUser = await updateUser(userID, updateFields);
         res.status(200).json(updatedUser);
     } catch (error) {
