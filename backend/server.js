@@ -4,7 +4,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
 import fs from 'fs';
-import { getAllUsers, createUser, createActivity, updateActivity, getActivities, getSingleActivity, deleteActivity, getActivitiesFromUser, getUsersWithActivities, getSingleUser, getSingleUserEmail, setFinishState, deleteUser } from './database.js';
+import { getAllUsers, createUser, updateUser, createActivity, updateActivity, getActivities, getSingleActivity, deleteActivity, getActivitiesFromUser, getUsersWithActivities, getSingleUser, getSingleUserEmail, setFinishState, deleteUser } from './database.js';
 import passport from './passportConfig.js';
 import session from 'express-session';
 import ExcelJS from 'exceljs'; 
