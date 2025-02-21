@@ -99,7 +99,9 @@ export async function createUser(inputName, inputEmail, inputDepartment, inputRo
  * @param {String} inputID - id des nuters, der gelöscht werden soll 
  * @param {Object} updateFields - alle Felder, die bearbeitet werden sollen
 */
-export async function updateUser(inputID, updateFields) {    
+export async function updateUser(inputID, updateFields) {   
+    const userID = ObjectId.createFromHexString(inputID);
+ 
     try {
         const updatedUser = await usersCollection.updateOne(
             { _id: userID },
