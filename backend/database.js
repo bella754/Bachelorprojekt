@@ -15,6 +15,13 @@ const client = new MongoClient(uri, {
   }
 });
 
+await client.connect();
+const database = client.db('Horus');
+const usersCollection = database.collection('users');
+const activitiesCollection = database.collection('activities');
+
+
+
 //--------------
 // Users -------
 //--------------
@@ -22,20 +29,13 @@ const client = new MongoClient(uri, {
 /* Get all users. FUNKTIONIERT */
 export async function getAllUsers() {
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         const users = await usersCollection.find().toArray();
         
         return users;
     } catch(error) {
         console.error("Error in getAllUsers:", error);
         throw new Error("Failed to get all users"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -46,20 +46,13 @@ export async function getSingleUser(inputID) {
     const userID = ObjectId.createFromHexString(inputID);
 
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         const user = await usersCollection.findOne({ _id: userID })
 
         return user;
     } catch(error) {
         console.error("Error in getSingleUser:", error);
         throw new Error("Failed to get single user with id"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -68,20 +61,13 @@ export async function getSingleUser(inputID) {
  */
 export async function getSingleUserEmail(inputEmail) {
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         const user = await usersCollection.findOne({ email: inputEmail });
         
         return user;
     } catch(error) {
         console.error("Error in getSingleUserEmail:", error);
         throw new Error("Failed to get single user with email"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -93,11 +79,6 @@ export async function getSingleUserEmail(inputEmail) {
  */
 export async function createUser(inputName, inputEmail, inputDepartment, inputRole) {
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         let user = await usersCollection.insertOne({
             "name": inputName,
             "email": inputEmail,
@@ -109,9 +90,7 @@ export async function createUser(inputName, inputEmail, inputDepartment, inputRo
     } catch (error) {
         console.error("Error in createUser:", error);
         throw new Error("Failed to create user"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 
@@ -121,17 +100,7 @@ export async function createUser(inputName, inputEmail, inputDepartment, inputRo
  * @param {Object} updateFields - alle Felder, die bearbeitet werden sollen
 */
 export async function updateUser(inputID, updateFields) {    
-    const userID = ObjectId.createFromHexString(inputID);
-    console.log("inputid und updatefields in database.js: ", inputID, updateFields);
-    console.log("userID after transform: ", userID);
-    
-
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         const updatedUser = await usersCollection.updateOne(
             { _id: userID },
             { $set: updateFields } 
@@ -143,9 +112,7 @@ export async function updateUser(inputID, updateFields) {
     } catch (error) {
         console.error("Error in updateUser:", error);
         throw new Error("Failed to update user"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -156,20 +123,13 @@ export async function deleteUser(inputID) {
     const userID = ObjectId.createFromHexString(inputID);
 
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         await usersCollection.deleteOne({ _id: userID })
 
         return `User with ${inputID} deleted`;
     } catch (error) {
         console.error("Error in deleteUser:", error);
         throw new Error("Failed to delete user"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 //----------------------------------------------------------
@@ -179,11 +139,6 @@ export async function deleteUser(inputID) {
 /* all activities FUNKTIONIERT */ 
 export async function getActivities() {
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
         const activities = await activitiesCollection.find().toArray();
 
         // console.log("Found activities: ", activities);
@@ -191,10 +146,7 @@ export async function getActivities() {
     } catch(error) {
         console.error("Error in getActivities:", error);
         throw new Error("Failed to get all activities"); 
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -207,21 +159,13 @@ export async function getActivitiesFromUser(inputUserID) {
     const userID = ObjectId.createFromHexString(inputUserID);
 
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
         const activities = await activitiesCollection.find({ userID: userID }).toArray();
         // console.log(`Database: Found activities for user with userID ${inputUserID}: `, activities);
         return activities;
     } catch(error) {
         console.error("Error in getActivitiesFromUser:", error);
         throw new Error("Failed to get all activities from user with userID: ", inputUserID); 
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -233,11 +177,6 @@ export async function getSingleActivity(inputID) {
     const activityID = ObjectId.createFromHexString(inputID);
 
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
         const activity = await activitiesCollection.findOne({ _id: activityID })
 
         console.log("Found activity: ", activity);
@@ -245,10 +184,7 @@ export async function getSingleActivity(inputID) {
     } catch(error) {
         console.error("Error in getSingleActivity:", error);
         throw new Error("Failed to get activity"); 
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -261,10 +197,6 @@ export async function createActivity(activityTitle, inputData, inputUserID) {
     const userID = ObjectId.createFromHexString(inputUserID);
 
     try {
-        await client.connect();
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
         const activity = {
             activity: activityTitle,
             createdAt: formatDateTime(new Date()),
@@ -279,8 +211,6 @@ export async function createActivity(activityTitle, inputData, inputUserID) {
     } catch(error) {
         console.error("Error in createActivity:", error);
         throw new Error("Failed to create activity"); 
-    }finally {
-        await client.close();
     }
 }
 
@@ -293,11 +223,6 @@ export async function updateActivity(inputID, updateInputs) {
     const activityID = new ObjectId(inputID);
 
     try {
-        await client.connect();
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
-        // Prüfen, ob die Aktivität existiert und ob sie bearbeitet werden darf
         const activity = await activitiesCollection.findOne({ _id: activityID });
 
         if (!activity) {
@@ -324,9 +249,7 @@ export async function updateActivity(inputID, updateInputs) {
     } catch(error) {
         console.error("Error in updateActivity:", error);
         throw new Error("Failed to update activity"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -337,11 +260,6 @@ export async function deleteActivity(inputID) {
     const activityID = ObjectId.createFromHexString(inputID);
 
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
         await activitiesCollection.deleteOne({ _id: activityID })
 
         // console.log("Found user: ", user);
@@ -349,10 +267,7 @@ export async function deleteActivity(inputID) {
     } catch (error) {
         console.error("Error deleting activity:", error);
         throw new Error("Failed to delete activity"); 
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    } 
 }
 
 /**
@@ -360,11 +275,6 @@ export async function deleteActivity(inputID) {
  */
 export async function getUsersWithActivities() {
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const usersCollection = database.collection('users');
-
         const usersWithActivities = await usersCollection.aggregate([
             {
                 $lookup: {
@@ -392,9 +302,7 @@ export async function getUsersWithActivities() {
     } catch (error) {
         console.error("Error getting data:", error);
         throw new Error("Failed to get data"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 
@@ -407,11 +315,6 @@ export async function setFinishState(inputID) {
     const userID = ObjectId.createFromHexString(inputID);
     
     try {
-        await client.connect();
-
-        const database = client.db('Horus');
-        const activitiesCollection = database.collection('activities');
-
         // Update alle Aktivitäten des Nutzers mit finished: false auf finished: true
         const result = await activitiesCollection.updateMany(
             { userID: userID, finished: false },  // Bedingung: Passende Aktivitäten des Nutzers finden
@@ -422,9 +325,7 @@ export async function setFinishState(inputID) {
     } catch (error) {
         console.error("Error sending data:", error);
         throw new Error("Failed to send data"); 
-    } finally {
-        await client.close();
-    }
+    } 
 }
 
 
