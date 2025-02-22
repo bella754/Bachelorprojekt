@@ -147,7 +147,7 @@ app.get('/api/current-user', (req, res) => {
     if (req.session.user) {
         res.json({ user: req.session.user });
     } else {
-        res.status(404).send("No user session found");
+        res.status(401).send("No user session found");
     }
 });
 
@@ -163,8 +163,8 @@ app.get('/api/all-users', async (req, res) => {
         const users = await getAllUsers();
         return res.status(200).json({ users });
     } catch (error) {
-        console.error("Fehler beim Abrufen der Benutzer:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Benutzer nicht abrufen' });
+        console.error("Error getting users:", error);
+        res.status(500).json({ error: 'Error getting users' });
     }
 });
 
@@ -172,15 +172,12 @@ app.get('/api/all-users', async (req, res) => {
  * FUNKTIONIERT 
  */
 app.get('/api/get-user/:userID', async (req, res) => {
-    try {
+    try{
         const user = await getSingleUser(req.params.userID);
-        if (!user) {
-            return res.status(404).json({ error: "Benutzer nicht gefunden" });
-        }
         res.status(200).json(user);
     } catch (error) {
-        console.error("Fehler beim Abrufen des Benutzers:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Benutzer nicht abrufen' });
+        console.error("Error getting user:", error);
+        res.status(404).send("No user found");
     }
 });
 
@@ -190,57 +187,34 @@ app.get('/api/get-user/:userID', async (req, res) => {
 app.post('/api/new-user', async (req, res) => {
     try {
         const { name, email, department, role } = req.body;
-
-        if (!name || !email || !department) {
-            return res.status(400).json({ error: "Name, Email und Department sind erforderlich" });
-        }
-
-        const existingUser = await getSingleUserEmail(email);
-        if (existingUser) {
-            return res.status(409).json({ error: "Ein Benutzer mit dieser E-Mail existiert bereits" });
-        }
-
         const new_user = await createUser(name, email, department, role);
         return res.status(201).json(new_user);
     } catch(error) {
-        console.error("Fehler beim Erstellen des Benutzers:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Benutzer nicht erstellen' });
+        console.error("Error creating user:", error);
+        res.status(500).json({ error: 'Error creating user' });
     }
 });
 
 app.put('/api/update-user', async (req, res) => {
     try {
         const { userID, ...updateFields } = req.body; 
-
-        if (!userID) {
-            return res.status(400).json({ error: "UserID ist erforderlich" });
-        }
-
-        const existingUser = await getSingleUser(userID);
-        if (!existingUser) {
-            return res.status(404).json({ error: "Benutzer nicht gefunden" });
-        }
-
+        console.log("userid und updateFields: ", userID, updateFields);
+        
         const updatedUser = await updateUser(userID, updateFields);
         res.status(200).json(updatedUser);
     } catch (error) {
-        console.error("Fehler beim Aktualisieren des Benutzers:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Benutzer nicht aktualisieren' });
+        console.error("Error updating user:", error);
+        res.status(403).send("Can't update user");
     }
 });
 
 app.delete('/api/delete-user/:userID', async (req, res) => {
     try {
-        const existingUser = await getSingleUser(req.params.userID);
-        if (!existingUser) {
-            return res.status(404).json({ error: "Benutzer nicht gefunden" });
-        }
-
         const deleteMessage = await deleteUser(req.params.userID);
         res.status(200).json(deleteMessage);
     } catch (error) {
-        console.error("Fehler beim Löschen des Benutzers:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Benutzer nicht löschen' });
+        console.error("Error deleting user:", error);
+        res.status(403).send("Can't delete user");
     }
 });
 
@@ -253,9 +227,9 @@ app.get('/api/all-activities', async (req, res) => {
     try {
         const activities = await getActivities();    
         res.status(200).json(activities);
-    }  catch (error) {
-        console.error("Fehler beim Abrufen der Aktivitäten:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Aktivitäten nicht abrufen' });
+    } catch (error) {
+        console.error("Error getting all activities:", error);
+        res.status(403).send("Can't get all activities");
     }
 })
 
@@ -265,9 +239,9 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
         const userID = req.params.userID;
         const activities = await getActivitiesFromUser(userID);
         res.status(200).json(activities)
-    } catch (error) {
-        console.error("Fehler beim Abrufen der Aktivitäten des Nutzers:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Aktivitäten des Nutzers nicht abrufen' });
+    } catch(error) {
+        console.error("Error getting all activities from user:", error);
+        res.status(403).send("Can't get all activities from user");
     }
         
     
@@ -279,9 +253,9 @@ app.get('/api/activity/:id', async (req, res) => {
         const activity = await getSingleActivity(req.params.id);
         res.status(200).json(activity);
     } catch (error) {
-        console.error("Fehler beim Abrufen der Aktivität:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Aktivität nicht abrufen' });
-    }
+        console.error("Error getting all activity:", error);
+        res.status(403).send("Can't get all activity");
+    } 
 });
 
 /**
@@ -317,9 +291,9 @@ app.post('/api/new-activity/:userID', async (req, res) => {
         const newActivity = await createActivity(activityTitle, activityData, userID);
         console.log("New activity created:", newActivity);
         res.status(200).json(newActivity);
-    } catch(error) {
-        console.error("Fehler beim Erstellen der Aktivität:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Aktivität nicht erstellen' });
+    } catch (error) {
+        console.error("Error creating activity:", error);
+        res.status(500).json({ error: 'Error creating activity' });
     }
 });
 
@@ -335,9 +309,9 @@ app.post('/api/send-data/:userID', async (req, res) => {
 
         res.status(201).json(result);
         
-    } catch(error) {
-        console.error("Fehler beim Senden der Daten:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Daten nicht senden' });
+    } catch (error) {
+        console.error("Error sending data:", error);
+        res.status(500).json({ error: 'Error sending data' });
     }
 });
 
@@ -349,21 +323,11 @@ app.post('/api/send-data/:userID', async (req, res) => {
 app.put('/api/update-activity', async (req, res) => {
     try {
         const { activityID, ...updateFields } = req.body; 
-
-        if (!activityID) {
-            return res.status(400).json({ error: "ActivityID ist erforderlich" });
-        }
-
-        const existingActivity = await getSingleActivity(activityID);
-        if (!existingActivity) {
-            return res.status(404).json({ error: "Aktivität nicht gefunden" });
-        }
-
         const updated_activity = await updateActivity(activityID, updateFields);
         res.status(200).json(updated_activity);
     } catch (error) {
-        console.error("Fehler beim Aktualisieren der Aktivität:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Aktivität nicht aktualisieren' });
+        console.error("Error updating activity:", error);
+        res.status(500).json({ error: 'Error updating activity' });
     }
 });
 
@@ -373,8 +337,8 @@ app.delete('/api/delete-activity/:id', async (req, res) => {
         const deleteMessage = await deleteActivity(req.params.id);
         res.status(200).json(deleteMessage);
     } catch (error) {
-        console.error("Fehler beim Löschen der Aktivität:", error);
-        res.status(500).json({ error: 'Serverfehler: Konnte Aktivität nicht löschen' });
+        console.error("Error deleting activity:", error);
+        res.status(500).json({ error: 'Error deleting activity' });
     }
 });
 
@@ -433,7 +397,7 @@ app.get('/api/export-excel', async (req, res) => {
         res.send(buffer);
 
     } catch (error) {
-        console.error("Fehler beim Excel Export:", error);
+        console.error("Fehler beim Exportieren:", error);
         res.status(500).send("Fehler beim Erstellen der Excel-Datei.");
     }
 });
