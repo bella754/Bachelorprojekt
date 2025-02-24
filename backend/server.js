@@ -370,6 +370,10 @@ app.post('/api/send-data/:userID', async (req, res) => {
     try {
         const result = await setFinishState(userID);
 
+        if (!result) {
+            return res.status(400).send("couldnt send data")
+        }
+
         return res.status(201).json(result);
         
     } catch (error) {
