@@ -267,6 +267,8 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
 
         const activities = await getActivitiesFromUser(userID);
 
+        console.log("activities from user: ", activities);
+
         if (!activities || activities == []) {
             return res.status(404).send("No activities found");
         }
