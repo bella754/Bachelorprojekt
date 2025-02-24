@@ -366,7 +366,6 @@ app.post('/api/send-data/:userID', async (req, res) => {
     }
 
     const userID = req.params.userID;
-    //console.log("userID in backend: ", userID);
     
     try {
         const result = await setFinishState(userID);

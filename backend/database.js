@@ -333,6 +333,11 @@ export async function setFinishState(inputID) {
     
     try {
         // Update alle Aktivitäten des Nutzers mit finished: false auf finished: true
+        const user = await activitiesCollection.findOne({ _id: activityID });
+        if (!user) {
+            return null;
+        }
+        
         const result = await activitiesCollection.updateMany(
             { userID: userID, finished: false },  // Bedingung: Passende Aktivitäten des Nutzers finden
             { $set: { finished: true } }  // Update: Setze finished auf true
