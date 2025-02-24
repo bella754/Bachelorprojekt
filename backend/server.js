@@ -279,7 +279,7 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
 /* FUNKTIONIERT */
 app.get('/api/activity/:id', async (req, res) => {
     try {
-        if (!req.params.userID) {
+        if (!req.params.id) {
             return res.status(400).send("No input id");
         }
 
