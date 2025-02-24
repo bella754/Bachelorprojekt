@@ -333,7 +333,7 @@ export async function setFinishState(inputID) {
     
     try {
         // Update alle Aktivitäten des Nutzers mit finished: false auf finished: true
-        const user = await activitiesCollection.findOne({ _id: userID });
+        const user = await usersCollection.findOne({ _id: userID });
         if (!user) {
             return null;
         }
