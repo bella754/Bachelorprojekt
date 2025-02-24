@@ -260,13 +260,17 @@ app.get('/api/all-activities', async (req, res) => {
 /* FUNKTIONIERT */
 app.get('/api/user-all-activities/:userID', async (req, res) => {
     try {
-        const userID = req.params.userID;
-
-        if (!userID) {
+        if (!req.params.userID) {
             return res.status(400).send("No user id provided");
         }
+        const userID = req.params.userID;
 
         const activities = await getActivitiesFromUser(userID);
+
+        if (!activities) {
+            return res.status(404).send("No activities found");
+        }
+
         return res.status(200).json(activities)
     } catch(error) {
         console.error("Error getting all activities from user:", error);
@@ -302,11 +306,13 @@ app.get('/api/activity/:id', async (req, res) => {
 *         dann zum laufen gebracht werdens
 */
 app.post('/api/new-activity/:userID', async (req, res) => {   
-    const userID = req.params.userID;
 
-    if (!userID) {
+    if (!req.params.userID) {
         return res.status(400).send("No user id provided");
     }
+
+    const userID = req.params.userID;
+
     const { activityTitle, ...activityData } = req.body;
 
     if (!activityTitle) {
@@ -345,11 +351,11 @@ app.post('/api/new-activity/:userID', async (req, res) => {
 * FUNKTIONIERT
 */ 
 app.post('/api/send-data/:userID', async (req, res) => {   
-    const userID = req.params.userID;
-
-    if (!userID) {
+    if (!req.params.userID) {
         return res.status(400).send("No user id provided");
     }
+
+    const userID = req.params.userID;
     //console.log("userID in backend: ", userID);
     
     try {
@@ -408,6 +414,10 @@ app.delete('/api/delete-activity/:id', async (req, res) => {
 app.get('/api/users-with-activities', async (req, res) => {
     try {
         const usersWithActivities = await getUsersWithActivities();
+
+        if (!usersWithActivities) {
+            return res.status(404).send("No users with activities found")
+        }
         return res.status(200).json(usersWithActivities);
     } catch (error) {
         console.error("Error fetching users with activities:", error);
