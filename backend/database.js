@@ -205,6 +205,12 @@ export async function createActivity(activityTitle, inputData, inputUserID) {
     const userID = ObjectId.createFromHexString(inputUserID);
 
     try {
+        // ✅ Überprüfe, ob der Nutzer existiert
+        const userExists = await usersCollection.findOne({ _id: userID });
+        if (!userExists) {
+            return null;
+        }
+
         const activity = {
             activity: activityTitle,
             createdAt: formatDateTime(new Date()),
@@ -214,13 +220,13 @@ export async function createActivity(activityTitle, inputData, inputUserID) {
         };
 
         const result = await activitiesCollection.insertOne(activity);
-        // console.log("Created activity:", result);
         return result;
     } catch(error) {
         console.error("Error in createActivity:", error);
         throw new Error("Failed to create activity"); 
     }
 }
+
 
 /**
  * Update activity.FUNKTIONIERT

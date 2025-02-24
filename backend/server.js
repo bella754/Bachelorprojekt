@@ -333,11 +333,6 @@ app.post('/api/new-activity/:userID', async (req, res) => {
     }
 
     const validate = validators[activityTitle];
-    //console.log("activityTitle: ", activityTitle);
-    //console.log("validators: ", validators);
-    //console.log("validators[activityTitle]: ", validate);
-    
-    
     
     if (!validate) {
         return res.status(400).json({ error: "Ungültiger schemaTitle oder Schema nicht gefunden." });
@@ -350,7 +345,11 @@ app.post('/api/new-activity/:userID', async (req, res) => {
 
     try {
         const newActivity = await createActivity(activityTitle, activityData, userID);
-        // console.log("New activity created:", newActivity);
+        
+        if (!newActivity) {
+            return res.status(400).send("Couldnt create activity")
+        }
+        
         return res.status(200).json(newActivity);
     } catch (error) {
         console.error("Error creating activity:", error);
