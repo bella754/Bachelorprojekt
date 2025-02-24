@@ -269,7 +269,7 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
 
         console.log("activities from user: ", activities);
 
-        if (!activities || activities == []) {
+        if (!activities || activities.length === 0) {
             return res.status(404).send("No activities found");
         }
 
@@ -388,6 +388,10 @@ app.put('/api/update-activity', async (req, res) => {
 
         const updated_activity = await updateActivity(activityID, updateFields);
         
+        if (!updated_activity) {
+            return res.status(400).send("Activity couldnt get updated")
+        }
+
         return res.status(200).json(updated_activity);
     } catch (error) {
         console.error("Error updating activity:", error);

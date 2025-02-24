@@ -108,7 +108,9 @@ export async function updateUser(inputID, updateFields) {
             { $set: updateFields } 
         );
 
-        // console.log("updatedUser: ", updatedUser);
+        if (updatedUser.matchedCount === 0) {
+            return null;
+        }
         
         return updatedUser;
     } catch (error) {
@@ -228,7 +230,7 @@ export async function updateActivity(inputID, updateInputs) {
         const activity = await activitiesCollection.findOne({ _id: activityID });
 
         if (!activity) {
-            return { success: false, error: "Aktivität nicht gefunden." };
+            return null;
         }
 
         if (activity.finished === true) {
