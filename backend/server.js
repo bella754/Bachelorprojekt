@@ -147,7 +147,7 @@ app.get('/api/current-user', (req, res) => {
     if (req.session.user) {
         res.json({ user: req.session.user });
     } else {
-        res.status(401).send("No user session found");
+        res.status(404).send("No user session found");
     }
 });
 
@@ -174,10 +174,15 @@ app.get('/api/all-users', async (req, res) => {
 app.get('/api/get-user/:userID', async (req, res) => {
     try{
         const user = await getSingleUser(req.params.userID);
+
+        if (!user) {
+            res.status(404).send("User not found")
+        }
+
         res.status(200).json(user);
     } catch (error) {
         console.error("Error getting user:", error);
-        res.status(404).send("No user found");
+        res.status(500).send("Error while getting user");
     }
 });
 
@@ -187,8 +192,13 @@ app.get('/api/get-user/:userID', async (req, res) => {
 app.post('/api/new-user', async (req, res) => {
     try {
         const { name, email, department, role } = req.body;
-        const new_user = await createUser(name, email, department, role);
-        return res.status(201).json(new_user);
+        
+        if (!name?.trim() || !email?.trim() || !department?.trim()) {
+            res.status(400).json({ error: "Invalid input data - Fields must not be empty" });
+        }
+
+        const new_user_message = await createUser(name, email, department, role);
+        return res.status(201).json(new_user_message);
     } catch(error) {
         console.error("Error creating user:", error);
         res.status(500).json({ error: 'Error creating user' });
@@ -198,23 +208,33 @@ app.post('/api/new-user', async (req, res) => {
 app.put('/api/update-user', async (req, res) => {
     try {
         const { userID, ...updateFields } = req.body; 
-        console.log("userid und updateFields: ", userID, updateFields);
+        // console.log("userid und updateFields: ", userID, updateFields);
         
+        if (!userID?.trim()) {
+            res.status(400).json({ error: "Invalid user id - Fields must not be empty" });
+        } else if (!updateFields?.trim()) {
+            res.status(400).json({ error: "No data to update" });
+        }
+
         const updatedUser = await updateUser(userID, updateFields);
         res.status(200).json(updatedUser);
     } catch (error) {
         console.error("Error updating user:", error);
-        res.status(403).send("Can't update user");
+        res.status(500).send("Can't update user");
     }
 });
 
 app.delete('/api/delete-user/:userID', async (req, res) => {
     try {
+        if (!req.params.userID) {
+            res.status(400).send("No input user id");
+        }
         const deleteMessage = await deleteUser(req.params.userID);
+        
         res.status(200).json(deleteMessage);
     } catch (error) {
         console.error("Error deleting user:", error);
-        res.status(403).send("Can't delete user");
+        res.status(500).send("Can't delete user");
     }
 });
 
@@ -229,7 +249,7 @@ app.get('/api/all-activities', async (req, res) => {
         res.status(200).json(activities);
     } catch (error) {
         console.error("Error getting all activities:", error);
-        res.status(403).send("Can't get all activities");
+        res.status(500).send("Can't get all activities");
     }
 })
 
@@ -237,11 +257,16 @@ app.get('/api/all-activities', async (req, res) => {
 app.get('/api/user-all-activities/:userID', async (req, res) => {
     try {
         const userID = req.params.userID;
+
+        if (!userID) {
+            res.status(400).send("No valid user id");
+        }
+
         const activities = await getActivitiesFromUser(userID);
         res.status(200).json(activities)
     } catch(error) {
         console.error("Error getting all activities from user:", error);
-        res.status(403).send("Can't get all activities from user");
+        res.status(500).send("Can't get all activities from user");
     }
         
     
@@ -250,11 +275,20 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
 /* FUNKTIONIERT */
 app.get('/api/activity/:id', async (req, res) => {
     try {
+        if (!req.params.userID) {
+            res.status(400).send("No input id");
+        }
+
         const activity = await getSingleActivity(req.params.id);
+        
+        if (!activity) {
+            res.status(404).send("Activity not found");
+        }
+
         res.status(200).json(activity);
     } catch (error) {
         console.error("Error getting all activity:", error);
-        res.status(403).send("Can't get all activity");
+        res.status(500).send("Can't get all activity");
     } 
 });
 
@@ -268,7 +302,9 @@ app.post('/api/new-activity/:userID', async (req, res) => {
     const { activityTitle, ...activityData } = req.body;
 
     if (!activityTitle) {
-        return res.status(400).json({ error: "Kein schemaTitle im Request-Body angegeben." });
+        res.status(400).json({ error: "Kein schemaTitle im Request-Body angegeben." });
+    } else if (!activityData) {
+        res.status(400).json({ error: "Keine Daten im Request-Body angegeben." });
     }
 
     const validate = validators[activityTitle];
@@ -302,7 +338,11 @@ app.post('/api/new-activity/:userID', async (req, res) => {
 */ 
 app.post('/api/send-data/:userID', async (req, res) => {   
     const userID = req.params.userID;
-    console.log("userID in backend: ", userID);
+
+    if (!userID) {
+        res.status(400).send("No user id provided");
+    }
+    //console.log("userID in backend: ", userID);
     
     try {
         const result = await setFinishState(userID);
@@ -323,7 +363,15 @@ app.post('/api/send-data/:userID', async (req, res) => {
 app.put('/api/update-activity', async (req, res) => {
     try {
         const { activityID, ...updateFields } = req.body; 
+
+        if (!activityID?.trim()) {
+            res.status(400).json({ error: "Invalid activity id - Fields must not be empty" });
+        } else if (!updateFields?.trim()) {
+            res.status(400).json({ error: "No data to update" });
+        }
+
         const updated_activity = await updateActivity(activityID, updateFields);
+        
         res.status(200).json(updated_activity);
     } catch (error) {
         console.error("Error updating activity:", error);
@@ -334,6 +382,10 @@ app.put('/api/update-activity', async (req, res) => {
 /* FUNKTIONIERT */
 app.delete('/api/delete-activity/:id', async (req, res) => {
     try {
+        if(!req.params.id) {
+            res.status(400).send("No activity id provided")
+        }
+
         const deleteMessage = await deleteActivity(req.params.id);
         res.status(200).json(deleteMessage);
     } catch (error) {

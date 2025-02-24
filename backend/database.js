@@ -108,7 +108,7 @@ export async function updateUser(inputID, updateFields) {
             { $set: updateFields } 
         );
 
-        console.log("updatedUser: ", updatedUser);
+        // console.log("updatedUser: ", updatedUser);
         
         return updatedUser;
     } catch (error) {
