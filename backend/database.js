@@ -127,9 +127,13 @@ export async function deleteUser(inputID) {
     const userID = ObjectId.createFromHexString(inputID);
 
     try {
-        await usersCollection.deleteOne({ _id: userID })
+        let delete_user = await usersCollection.deleteOne({ _id: userID });
 
-        return `User with ${inputID} deleted`;
+        if (delete_user.deletedCount === 0) {
+            return null;
+        }
+
+        return delete_user;
     } catch (error) {
         console.error("Error in deleteUser:", error);
         throw new Error("Failed to delete user"); 
@@ -264,10 +268,13 @@ export async function deleteActivity(inputID) {
     const activityID = ObjectId.createFromHexString(inputID);
 
     try {
-        await activitiesCollection.deleteOne({ _id: activityID })
+        let delete_activity = await activitiesCollection.deleteOne({ _id: activityID })
 
+        if (delete_activity.deletedCount === 0) {
+            return null;
+        }
         // console.log("Found user: ", user);
-        return `Activity with ${inputID} deleted`;
+        return delete_activity;
     } catch (error) {
         console.error("Error deleting activity:", error);
         throw new Error("Failed to delete activity"); 

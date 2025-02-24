@@ -221,6 +221,11 @@ app.put('/api/update-user', async (req, res) => {
         }
 
         const updatedUser = await updateUser(userID, updateFields);
+
+        if (!updatedUser) {
+            return res.status(400).send("Couldnt update user")
+        }
+
         return res.status(200).json(updatedUser);
     } catch (error) {
         console.error("Error updating user:", error);
@@ -234,6 +239,10 @@ app.delete('/api/delete-user/:userID', async (req, res) => {
             return res.status(400).send("No input user id");
         }
         const deleteMessage = await deleteUser(req.params.userID);
+
+        if (!deleteMessage) {
+            return res.status(400).send("Couldnt delete user")
+        }
         
         return res.status(200).json(deleteMessage);
     } catch (error) {
@@ -407,6 +416,11 @@ app.delete('/api/delete-activity/:id', async (req, res) => {
         }
 
         const deleteMessage = await deleteActivity(req.params.id);
+
+        if (!deleteMessage) {
+            return res.status(400).send("Couldnt delete activity")
+        }
+
         return res.status(200).json(deleteMessage);
     } catch (error) {
         console.error("Error deleting activity:", error);
