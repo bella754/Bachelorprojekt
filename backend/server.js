@@ -216,7 +216,7 @@ app.put('/api/update-user', async (req, res) => {
         
         if (!userID?.trim()) {
             return res.status(400).json({ error: "Invalid user id - Fields must not be empty" });
-        } else if (!updateFields) {
+        } else if (Object.keys(updateFields).length === 0) {
             return res.status(400).json({ error: "No data to update" });
         }
 
@@ -391,7 +391,7 @@ app.put('/api/update-activity', async (req, res) => {
 
         if (!activityID?.trim()) {
             return res.status(400).json({ error: "Invalid activity id - Fields must not be empty" });
-        } else if (!updateFields) {
+        } else if (Object.keys(updateFields).length === 0) {
             return res.status(400).json({ error: "No data to update" });
         }
 
