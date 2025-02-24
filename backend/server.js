@@ -173,6 +173,10 @@ app.get('/api/all-users', async (req, res) => {
  */
 app.get('/api/get-user/:userID', async (req, res) => {
     try{
+        if (!req.params.userID) {
+            return res.status(404).send("No userID provided")
+        }
+
         const user = await getSingleUser(req.params.userID);
 
         if (!user) {
@@ -259,7 +263,7 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
         const userID = req.params.userID;
 
         if (!userID) {
-            return res.status(400).send("No valid user id");
+            return res.status(400).send("No user id provided");
         }
 
         const activities = await getActivitiesFromUser(userID);
@@ -329,7 +333,7 @@ app.post('/api/new-activity/:userID', async (req, res) => {
 
     try {
         const newActivity = await createActivity(activityTitle, activityData, userID);
-        console.log("New activity created:", newActivity);
+        // console.log("New activity created:", newActivity);
         return res.status(200).json(newActivity);
     } catch (error) {
         console.error("Error creating activity:", error);
