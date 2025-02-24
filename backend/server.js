@@ -176,10 +176,10 @@ app.get('/api/get-user/:userID', async (req, res) => {
         const user = await getSingleUser(req.params.userID);
 
         if (!user) {
-            res.status(404).send("User not found")
+            return res.status(404).send("User not found")
         }
 
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (error) {
         console.error("Error getting user:", error);
         res.status(500).send("Error while getting user");
@@ -194,7 +194,7 @@ app.post('/api/new-user', async (req, res) => {
         const { name, email, department, role } = req.body;
         
         if (!name?.trim() || !email?.trim() || !department?.trim()) {
-            res.status(400).json({ error: "Invalid input data - Fields must not be empty" });
+            return res.status(400).json({ error: "Invalid input data - Fields must not be empty" });
         }
 
         const new_user_message = await createUser(name, email, department, role);
@@ -211,13 +211,13 @@ app.put('/api/update-user', async (req, res) => {
         // console.log("userid und updateFields: ", userID, updateFields);
         
         if (!userID?.trim()) {
-            res.status(400).json({ error: "Invalid user id - Fields must not be empty" });
+            return res.status(400).json({ error: "Invalid user id - Fields must not be empty" });
         } else if (!updateFields?.trim()) {
-            res.status(400).json({ error: "No data to update" });
+            return res.status(400).json({ error: "No data to update" });
         }
 
         const updatedUser = await updateUser(userID, updateFields);
-        res.status(200).json(updatedUser);
+        return res.status(200).json(updatedUser);
     } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).send("Can't update user");
@@ -227,11 +227,11 @@ app.put('/api/update-user', async (req, res) => {
 app.delete('/api/delete-user/:userID', async (req, res) => {
     try {
         if (!req.params.userID) {
-            res.status(400).send("No input user id");
+            return res.status(400).send("No input user id");
         }
         const deleteMessage = await deleteUser(req.params.userID);
         
-        res.status(200).json(deleteMessage);
+        return res.status(200).json(deleteMessage);
     } catch (error) {
         console.error("Error deleting user:", error);
         res.status(500).send("Can't delete user");
@@ -246,7 +246,7 @@ app.delete('/api/delete-user/:userID', async (req, res) => {
 app.get('/api/all-activities', async (req, res) => {
     try {
         const activities = await getActivities();    
-        res.status(200).json(activities);
+        return res.status(200).json(activities);
     } catch (error) {
         console.error("Error getting all activities:", error);
         res.status(500).send("Can't get all activities");
@@ -259,11 +259,11 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
         const userID = req.params.userID;
 
         if (!userID) {
-            res.status(400).send("No valid user id");
+            return res.status(400).send("No valid user id");
         }
 
         const activities = await getActivitiesFromUser(userID);
-        res.status(200).json(activities)
+        return res.status(200).json(activities)
     } catch(error) {
         console.error("Error getting all activities from user:", error);
         res.status(500).send("Can't get all activities from user");
@@ -276,16 +276,16 @@ app.get('/api/user-all-activities/:userID', async (req, res) => {
 app.get('/api/activity/:id', async (req, res) => {
     try {
         if (!req.params.userID) {
-            res.status(400).send("No input id");
+            return res.status(400).send("No input id");
         }
 
         const activity = await getSingleActivity(req.params.id);
         
         if (!activity) {
-            res.status(404).send("Activity not found");
+            return res.status(404).send("Activity not found");
         }
 
-        res.status(200).json(activity);
+        return res.status(200).json(activity);
     } catch (error) {
         console.error("Error getting all activity:", error);
         res.status(500).send("Can't get all activity");
@@ -299,18 +299,22 @@ app.get('/api/activity/:id', async (req, res) => {
 */
 app.post('/api/new-activity/:userID', async (req, res) => {   
     const userID = req.params.userID;
+
+    if (!userID) {
+        return res.status(400).send("No user id provided");
+    }
     const { activityTitle, ...activityData } = req.body;
 
     if (!activityTitle) {
-        res.status(400).json({ error: "Kein schemaTitle im Request-Body angegeben." });
+        return res.status(400).json({ error: "Kein schemaTitle im Request-Body angegeben." });
     } else if (!activityData) {
-        res.status(400).json({ error: "Keine Daten im Request-Body angegeben." });
+        return res.status(400).json({ error: "Keine Daten im Request-Body angegeben." });
     }
 
     const validate = validators[activityTitle];
-    console.log("activityTitle: ", activityTitle);
-    console.log("validators: ", validators);
-    console.log("validators[activityTitle]: ", validate);
+    //console.log("activityTitle: ", activityTitle);
+    //console.log("validators: ", validators);
+    //console.log("validators[activityTitle]: ", validate);
     
     
     
@@ -326,7 +330,7 @@ app.post('/api/new-activity/:userID', async (req, res) => {
     try {
         const newActivity = await createActivity(activityTitle, activityData, userID);
         console.log("New activity created:", newActivity);
-        res.status(200).json(newActivity);
+        return res.status(200).json(newActivity);
     } catch (error) {
         console.error("Error creating activity:", error);
         res.status(500).json({ error: 'Error creating activity' });
@@ -340,14 +344,14 @@ app.post('/api/send-data/:userID', async (req, res) => {
     const userID = req.params.userID;
 
     if (!userID) {
-        res.status(400).send("No user id provided");
+        return res.status(400).send("No user id provided");
     }
     //console.log("userID in backend: ", userID);
     
     try {
         const result = await setFinishState(userID);
 
-        res.status(201).json(result);
+        return res.status(201).json(result);
         
     } catch (error) {
         console.error("Error sending data:", error);
@@ -365,14 +369,14 @@ app.put('/api/update-activity', async (req, res) => {
         const { activityID, ...updateFields } = req.body; 
 
         if (!activityID?.trim()) {
-            res.status(400).json({ error: "Invalid activity id - Fields must not be empty" });
+            return res.status(400).json({ error: "Invalid activity id - Fields must not be empty" });
         } else if (!updateFields?.trim()) {
-            res.status(400).json({ error: "No data to update" });
+            return res.status(400).json({ error: "No data to update" });
         }
 
         const updated_activity = await updateActivity(activityID, updateFields);
         
-        res.status(200).json(updated_activity);
+        return res.status(200).json(updated_activity);
     } catch (error) {
         console.error("Error updating activity:", error);
         res.status(500).json({ error: 'Error updating activity' });
@@ -383,11 +387,11 @@ app.put('/api/update-activity', async (req, res) => {
 app.delete('/api/delete-activity/:id', async (req, res) => {
     try {
         if(!req.params.id) {
-            res.status(400).send("No activity id provided")
+            return res.status(400).send("No activity id provided")
         }
 
         const deleteMessage = await deleteActivity(req.params.id);
-        res.status(200).json(deleteMessage);
+        return res.status(200).json(deleteMessage);
     } catch (error) {
         console.error("Error deleting activity:", error);
         res.status(500).json({ error: 'Error deleting activity' });
@@ -400,7 +404,7 @@ app.delete('/api/delete-activity/:id', async (req, res) => {
 app.get('/api/users-with-activities', async (req, res) => {
     try {
         const usersWithActivities = await getUsersWithActivities();
-        res.status(200).json(usersWithActivities);
+        return res.status(200).json(usersWithActivities);
     } catch (error) {
         console.error("Error fetching users with activities:", error);
         res.status(500).json({ error: 'Error fetching data' });
