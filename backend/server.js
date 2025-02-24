@@ -216,7 +216,7 @@ app.put('/api/update-user', async (req, res) => {
         
         if (!userID?.trim()) {
             return res.status(400).json({ error: "Invalid user id - Fields must not be empty" });
-        } else if (!updateFields?.trim()) {
+        } else if (!updateFields) {
             return res.status(400).json({ error: "No data to update" });
         }
 
@@ -380,7 +380,7 @@ app.put('/api/update-activity', async (req, res) => {
 
         if (!activityID?.trim()) {
             return res.status(400).json({ error: "Invalid activity id - Fields must not be empty" });
-        } else if (!updateFields?.trim()) {
+        } else if (!updateFields) {
             return res.status(400).json({ error: "No data to update" });
         }
 
@@ -416,7 +416,7 @@ app.get('/api/users-with-activities', async (req, res) => {
         const usersWithActivities = await getUsersWithActivities();
 
         if (!usersWithActivities) {
-            return res.status(404).send("No users with activities found")
+            return res.status(404).send("No users with activities")
         }
         return res.status(200).json(usersWithActivities);
     } catch (error) {
