@@ -380,7 +380,7 @@ app.post('/api/send-data/:userID', async (req, res) => {
         console.error("Error sending data:", error);
         res.status(500).json({ error: 'Error sending data' });
     }
-});
+}); 
 
 /* 
 * FUNKTIONIERT 
